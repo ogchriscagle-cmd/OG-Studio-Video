@@ -1,0 +1,153 @@
+{
+  "song_title": "09 Midnight Both Ways_mastered_v3",
+  "artist": "",
+  "tempo_bpm": 136.0,
+  "key": "F# minor",
+  "total_duration": 204.8,
+  "scene_count": 13,
+  "scenes": [
+    {
+      "scene_number": 1,
+      "section_label": "intro",
+      "start": 0.0,
+      "end": 6.34,
+      "duration": 6.34,
+      "energy": 0.36,
+      "video_prompt": "an empty stage bathed in light, steady tracking shot, warm amber and brown color grade, cinematic lighting, high detail, mid energy mood",
+      "image_prompt": "an empty stage bathed in light, warm amber and brown color grade, cinematic lighting, high detail, mid-energy atmosphere",
+      "video_audio_prompt": "steady tracking shot, mid energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    },
+    {
+      "scene_number": 2,
+      "section_label": "verse",
+      "start": 6.34,
+      "end": 12.49,
+      "duration": 6.15,
+      "energy": 0.331,
+      "video_prompt": "hands playing an instrument in close-up, medium push-in, dusty rose and gold color grade, cinematic lighting, high detail, mid energy mood",
+      "image_prompt": "hands playing an instrument in close-up, dusty rose and gold color grade, cinematic lighting, high detail, mid-energy atmosphere",
+      "video_audio_prompt": "medium push-in, mid energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    },
+    {
+      "scene_number": 3,
+      "section_label": "verse",
+      "start": 12.49,
+      "end": 38.99,
+      "duration": 26.49,
+      "energy": 0.399,
+      "video_prompt": "a quiet room with light through the blinds, slow orbit around the subject, golden hour orange color grade, cinematic lighting, high detail, mid energy mood",
+      "image_prompt": "a quiet room with light through the blinds, golden hour orange color grade, cinematic lighting, high detail, mid-energy atmosphere",
+      "video_audio_prompt": "slow orbit around the subject, mid energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    },
+    {
+      "scene_number": 4,
+      "section_label": "verse",
+      "start": 38.99,
+      "end": 42.47,
+      "duration": 3.48,
+      "energy": 0.213,
+      "video_prompt": "a reflection in a window at night, soft handheld sway, misty teal and charcoal color grade, cinematic lighting, high detail, low energy mood",
+      "image_prompt": "a reflection in a window at night, misty teal and charcoal color grade, cinematic lighting, high detail, low-energy atmosphere",
+      "video_audio_prompt": "soft handheld sway, low energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    },
+    {
+      "scene_number": 5,
+      "section_label": "verse",
+      "start": 42.47,
+      "end": 87.14,
+      "duration": 44.68,
+      "energy": 0.39,
+      "video_prompt": "a figure walking through a rain-soaked street, steady tracking shot, warm amber and brown color grade, cinematic lighting, high detail, mid energy mood",
+      "image_prompt": "a figure walking through a rain-soaked street, warm amber and brown color grade, cinematic lighting, high detail, mid-energy atmosphere",
+      "video_audio_prompt": "steady tracking shot, mid energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    },
+    {
+      "scene_number": 6,
+      "section_label": "verse",
+      "start": 87.14,
+      "end": 120.02,
+      "duration": 32.88,
+      "energy": 0.401,
+      "video_prompt": "hands playing an instrument in close-up, medium push-in, dusty rose and gold color grade, cinematic lighting, high detail, mid energy mood",
+      "image_prompt": "hands playing an instrument in close-up, dusty rose and gold color grade, cinematic lighting, high detail, mid-energy atmosphere",
+      "video_audio_prompt": "medium push-in, mid energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    },
+    {
+      "scene_number": 7,
+      "section_label": "verse",
+      "start": 120.02,
+      "end": 137.25,
+      "duration": 17.23,
+      "energy": 0.43,
+      "video_prompt": "a quiet room with light through the blinds, slow orbit around the subject, golden hour orange color grade, cinematic lighting, high detail, mid energy mood",
+      "image_prompt": "a quiet room with light through the blinds, golden hour orange color grade, cinematic lighting, high detail, mid-energy atmosphere",
+      "video_audio_prompt": "slow orbit around the subject, mid energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    },
+    {
+      "scene_number": 8,
+      "section_label": "verse",
+      "start": 137.25,
+      "end": 163.42,
+      "duration": 26.17,
+      "energy": 0.424,
+      "video_prompt": "a reflection in a window at night, walking POV shot, earthy green and tan color grade, cinematic lighting, high detail, mid energy mood",
+      "image_prompt": "a reflection in a window at night, earthy green and tan color grade, cinematic lighting, high detail, mid-energy atmosphere",
+      "video_audio_prompt": "walking POV shot, mid energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    },
+    {
+      "scene_number": 9,
+      "section_label": "bridge",
+      "start": 163.42,
+      "end": 180.86,
+      "duration": 17.44,
+      "energy": 0.435,
+      "video_prompt": "a slow-motion close-up of raindrops on glass, steady tracking shot, warm amber and brown color grade, cinematic lighting, high detail, mid energy mood",
+      "image_prompt": "a slow-motion close-up of raindrops on glass, warm amber and brown color grade, cinematic lighting, high detail, mid-energy atmosphere",
+      "video_audio_prompt": "steady tracking shot, mid energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    },
+    {
+      "scene_number": 10,
+      "section_label": "bridge",
+      "start": 180.86,
+      "end": 190.64,
+      "duration": 9.78,
+      "energy": 0.309,
+      "video_prompt": "a solitary dancer frozen mid-motion, gentle drift forward, soft desaturated sepia color grade, cinematic lighting, high detail, low energy mood",
+      "image_prompt": "a solitary dancer frozen mid-motion, soft desaturated sepia color grade, cinematic lighting, high detail, low-energy atmosphere",
+      "video_audio_prompt": "gentle drift forward, low energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    },
+    {
+      "scene_number": 11,
+      "section_label": "chorus",
+      "start": 190.64,
+      "end": 194.03,
+      "duration": 3.39,
+      "energy": 0.585,
+      "video_prompt": "fireworks bursting over a packed arena, slow orbit around the subject, golden hour orange color grade, cinematic lighting, high detail, mid energy mood",
+      "image_prompt": "fireworks bursting over a packed arena, golden hour orange color grade, cinematic lighting, high detail, mid-energy atmosphere",
+      "video_audio_prompt": "slow orbit around the subject, mid energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    },
+    {
+      "scene_number": 12,
+      "section_label": "chorus",
+      "start": 194.03,
+      "end": 199.97,
+      "duration": 5.94,
+      "energy": 0.518,
+      "video_prompt": "dancers moving in perfect unison under strobing light, walking POV shot, earthy green and tan color grade, cinematic lighting, high detail, mid energy mood",
+      "image_prompt": "dancers moving in perfect unison under strobing light, earthy green and tan color grade, cinematic lighting, high detail, mid-energy atmosphere",
+      "video_audio_prompt": "walking POV shot, mid energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    },
+    {
+      "scene_number": 13,
+      "section_label": "outro",
+      "start": 199.97,
+      "end": 204.8,
+      "duration": 4.83,
+      "energy": 0.201,
+      "video_prompt": "the stage lights fading to black, slow static wide shot, muted blue and grey color grade, cinematic lighting, high detail, low energy mood",
+      "image_prompt": "the stage lights fading to black, muted blue and grey color grade, cinematic lighting, high detail, low-energy atmosphere",
+      "video_audio_prompt": "slow static wide shot, low energy mood, subtle atmospheric motion and ambient sound matching the scene"
+    }
+  ]
+}
