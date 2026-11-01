@@ -50,4 +50,4 @@ kept. **Show downloaded update** opens the download folder.
 This repository is private. The updater can reuse an existing GitHub credential
 from Git Credential Manager when Git is installed, without prompting or saving a
 new token. Otherwise use **GitHub releases** to sign in and download in your
-browser. No credentials are sent to GitHub's asset CDN.
+browser. No GitHub account credentials are sent to the asset CDN.
