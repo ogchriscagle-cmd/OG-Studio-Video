@@ -4,12 +4,13 @@ Analyzes an mp3/wav, builds a scene storyboard, and opens VideoExpress.ai
 so you can paste the generated prompts in order.
 """
 import os
+import json
 import sys
 import threading
 import traceback
 import webbrowser
 import tkinter as tk
-from tkinter import filedialog, messagebox, scrolledtext
+from tkinter import filedialog, messagebox, scrolledtext, simpledialog
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from analyze import analyze_song
@@ -24,8 +25,8 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title(APP_TITLE)
-        self.geometry("720x560")
-        self.minsize(640, 480)
+        self.geometry("780x680")
+        self.minsize(720, 600)
 
         self.audio_path = tk.StringVar()
         self.song_title = tk.StringVar()
@@ -74,7 +75,7 @@ class App(tk.Tk):
         frm_run_opts.pack(fill="x", **pad)
         tk.Label(frm_run_opts, text="Photo name in library:", width=18, anchor="w").pack(side="left")
         tk.Entry(frm_run_opts, textvariable=self.ref_photo_library_name).pack(side="left", padx=5)
-        tk.Label(frm_run_opts, text="  (auto-filled after upload; edit if it looks wrong)",
+        tk.Label(frm_run_opts, text="(reference image name)",
                  fg="#888").pack(side="left", padx=(0, 10))
         tk.Label(frm_run_opts, text="Aspect:").pack(side="left")
         tk.OptionMenu(frm_run_opts, self.aspect_ratio, "16:9", "9:16").pack(side="left")
@@ -83,24 +84,28 @@ class App(tk.Tk):
         frm_actions.pack(fill="x", **pad)
         self.analyze_btn = tk.Button(frm_actions, text="Analyze & Build Storyboard",
                                       command=self.run_analysis, bg="#2d6cdf", fg="white")
-        self.analyze_btn.pack(side="left")
+        self.analyze_btn.grid(row=0, column=0, sticky="ew", padx=3, pady=4)
         self.open_folder_btn = tk.Button(frm_actions, text="Open Output Folder",
                                           command=self.open_output_folder, state="disabled")
-        self.open_folder_btn.pack(side="left", padx=6)
+        self.open_folder_btn.grid(row=0, column=1, sticky="ew", padx=3, pady=4)
         self.open_videoexpress_btn = tk.Button(frm_actions, text="Open VideoExpress.ai",
                                                 command=self.open_videoexpress)
-        self.open_videoexpress_btn.pack(side="left", padx=6)
-        self.setup_project_btn = tk.Button(frm_actions, text="Upload Title Folder to VideoExpress",
+        self.open_videoexpress_btn.grid(row=0, column=2, sticky="ew", padx=3, pady=4)
+        self.setup_project_btn = tk.Button(frm_actions, text="Upload Project Media",
                                             command=self.run_setup_project, bg="#3a9d4e", fg="white")
-        self.setup_project_btn.pack(side="left", padx=6)
-        self.run_storyboard_btn = tk.Button(frm_actions, text="Run Storyboard on VideoExpress",
+        self.setup_project_btn.grid(row=1, column=0, sticky="ew", padx=3, pady=4)
+        self.run_storyboard_btn = tk.Button(frm_actions, text="Run Storyboard",
                                              command=self.run_storyboard, bg="#d9822b", fg="white")
-        self.run_storyboard_btn.pack(side="left", padx=6)
+        self.run_storyboard_btn.grid(row=1, column=1, sticky="ew", padx=3, pady=4)
         self.assemble_btn = tk.Button(frm_actions, text="Combine Scenes + Add Song",
                                        command=self.run_assemble, bg="#7a3ad9", fg="white")
-        self.assemble_btn.pack(side="left", padx=6)
+        self.assemble_btn.grid(row=1, column=2, sticky="ew", padx=3, pady=4)
+        self.test_scene_btn = tk.Button(frm_actions, text="Test First Scene", command=lambda: self.run_storyboard(first_scene_only=True))
+        self.test_scene_btn.grid(row=2, column=1, sticky="ew", padx=3, pady=4)
+        for column in range(3):
+            frm_actions.columnconfigure(column, weight=1, uniform="actions")
 
-        self.status_label = tk.Label(self, text="Ready.", anchor="w", fg="#555")
+        self.status_label = tk.Label(self, text="Ready.", anchor="w", justify="left", fg="#555", wraplength=680)
         self.status_label.pack(fill="x", padx=10)
 
         tk.Label(self, text="Storyboard preview:", anchor="w").pack(fill="x", padx=10, pady=(10, 0))
@@ -242,7 +247,7 @@ class App(tk.Tk):
         messagebox.showerror(APP_TITLE, "VideoExpress setup failed:\n" + msg)
         print(full_trace, file=sys.stderr)
 
-    def run_storyboard(self):
+    def run_storyboard(self, first_scene_only=False):
         title = self.song_title.get().strip()
         if not title:
             messagebox.showerror(APP_TITLE, "Please enter a song title first "
@@ -264,25 +269,27 @@ class App(tk.Tk):
 
         if not messagebox.askyesno(
             APP_TITLE,
-            f"This will generate a video for every scene in the storyboard using folder "
+            f"This will generate {'the first scene only' if first_scene_only else 'every scene in the storyboard'} using folder "
             f"\"{folder_name}\" and photo \"{ref_photo_name}\" on VideoExpress. This can take "
             f"a while and opens a visible browser window. Continue?",
         ):
             return
 
         self.run_storyboard_btn.config(state="disabled")
+        self.test_scene_btn.config(state="disabled")
         self.set_status(f"Running storyboard on VideoExpress (folder {folder_name!r})... "
                          "a browser window will open, please leave it alone.")
         thread = threading.Thread(
             target=self._run_storyboard_worker,
-            args=(json_path, ref_photo_name, aspect, folder_name),
+            args=(json_path, ref_photo_name, aspect, folder_name, first_scene_only),
             daemon=True,
         )
         thread.start()
 
-    def _run_storyboard_worker(self, json_path, ref_photo_name, aspect, folder_name):
+    def _run_storyboard_worker(self, json_path, ref_photo_name, aspect, folder_name, first_scene_only=False):
         try:
-            run_batch(json_path, ref_photo_name, aspect, folder_name=folder_name)
+            run_batch(json_path, ref_photo_name, aspect, folder_name=folder_name,
+                      end_scene=1 if first_scene_only else None)
             self.after(0, self._on_run_storyboard_done)
         except Exception as e:
             err = traceback.format_exc()
@@ -290,10 +297,12 @@ class App(tk.Tk):
 
     def _on_run_storyboard_done(self):
         self.run_storyboard_btn.config(state="normal")
+        self.test_scene_btn.config(state="normal")
         self.set_status("Done. Check VideoExpress Media Library for render progress.")
 
     def _on_run_storyboard_error(self, msg, full_trace):
         self.run_storyboard_btn.config(state="normal")
+        self.test_scene_btn.config(state="normal")
         self.set_status("Error running storyboard on VideoExpress.")
         messagebox.showerror(APP_TITLE, "VideoExpress run failed:\n" + msg)
         print(full_trace, file=sys.stderr)
@@ -307,9 +316,26 @@ class App(tk.Tk):
             return
         folder_name = title
 
+        if not self.last_json_path:
+            messagebox.showerror(APP_TITLE, "Build the storyboard before assembling its clips.")
+            return
+        with open(self.last_json_path, encoding="utf-8") as f:
+            scene_count = len(json.load(f)["scenes"])
+        raw_ids = simpledialog.askstring(
+            APP_TITLE,
+            f"Enter {scene_count} rendered video asset IDs from My AI Videos, "
+            "separated by commas, in storyboard order:", parent=self,
+        )
+        if raw_ids is None:
+            return
+        video_idents = [value.strip() for value in raw_ids.split(",")]
+        if len(video_idents) != scene_count or any(not value.isascii() or not value.isdecimal() for value in video_idents):
+            messagebox.showerror(APP_TITLE, f"Enter exactly {scene_count} numeric video asset IDs in scene order.")
+            return
+
         if not messagebox.askyesno(
             APP_TITLE,
-            f"This will drag every generated scene clip in folder \"{folder_name}\" onto the "
+            f"This will drag the {scene_count} selected scene clips for \"{folder_name}\" onto the "
             f"timeline in order, then add the song as a second audio track, and save the "
             f"project. Make sure all scene clips have finished rendering in Media Library "
             f"first. A browser window will open -- please leave it alone. Continue?",
@@ -321,14 +347,14 @@ class App(tk.Tk):
                          "a browser window will open, please leave it alone.")
         thread = threading.Thread(
             target=self._run_assemble_worker,
-            args=(folder_name,),
+            args=(folder_name, video_idents),
             daemon=True,
         )
         thread.start()
 
-    def _run_assemble_worker(self, folder_name):
+    def _run_assemble_worker(self, folder_name, video_idents):
         try:
-            assemble_final_video(folder_name)
+            assemble_final_video(folder_name, video_idents=video_idents)
             self.after(0, self._on_assemble_done)
         except Exception as e:
             err = traceback.format_exc()

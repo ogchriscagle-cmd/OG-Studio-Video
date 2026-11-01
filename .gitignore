@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+videoexpress_auth_state.json
+videoexpress_run_log.json
+debug/
+build/
+dist/
+.verification/
+.models/
+.studio-session.json
+.studio-session.json.tmp
+.studio-session.json.*.tmp
+output/projects/
+output/clips/
+output/storyboard.clips.json

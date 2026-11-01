@@ -1,16 +1,21 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import collect_submodules, copy_metadata
 
 
 a = Analysis(
-    ['app.py'],
+    ['studio_app.py'],
     pathex=[],
     binaries=[],
-    datas=[],
-    hiddenimports=[],
+    datas=[('studio', 'studio')] + copy_metadata('transformers') + copy_metadata('huggingface-hub'),
+    hiddenimports=collect_submodules('transformers.models.blip') + [
+        'transformers.models.bert.tokenization_bert',
+        'transformers.models.bert.tokenization_bert_fast',
+        'webview.platforms.edgechromium', 'sklearn.utils._cython_blas',
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=['matplotlib', 'IPython', 'pytest', 'tkinter', 'tensorflow', 'jax'],
     noarchive=False,
     optimize=0,
 )
@@ -21,7 +26,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='MusicVideoStoryboard',
+    name='OG Studio',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -40,5 +45,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='MusicVideoStoryboard',
+    name='OG Studio',
 )
