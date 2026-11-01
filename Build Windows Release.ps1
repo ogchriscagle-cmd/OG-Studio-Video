@@ -6,6 +6,6 @@ if (-not (Test-Path -LiteralPath $python)) { throw 'Create .venv and install req
 if ($LASTEXITCODE -ne 0) { throw 'PyInstaller installation failed.' }
 & $python -m PyInstaller --noconfirm MusicVideoStoryboard.spec
 if ($LASTEXITCODE -ne 0) { throw 'Executable build failed.' }
-Copy-Item -LiteralPath 'RELEASE-NOTES.md' -Destination 'dist\README-v1.2.1.md' -Force
+Copy-Item -LiteralPath 'RELEASE-NOTES.md' -Destination 'dist\README.md' -Force
 & $python package_release.py
 if ($LASTEXITCODE -ne 0) { throw 'Release packaging failed.' }

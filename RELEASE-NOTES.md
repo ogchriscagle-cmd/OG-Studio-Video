@@ -1,18 +1,18 @@
-# OG Studio v1.2.1 for Windows
+# OG Studio v1.3.0 for Windows
 
 Create a music-video storyboard, keep a consistent character, generate scenes in
 VideoExpress, import clips, assemble the final project, and export its MP4.
 
 ## Install
 
-1. Download `OG-Studio-v1.2.1-windows-x64.exe` from this release.
+1. Download `OG-Studio-v1.3.0-windows-x64.exe` from this release.
 2. Open the EXE. Python and a separate `_internal` folder are not required.
 3. Wait for the bundled files to unpack and the app to open. Startup can take a minute.
 4. Use the VideoExpress account card to sign in once on your computer.
 
-This hotfix replaces the v1.2 folder ZIP with a single-file executable. Windows
+This release retains the single-file packaging introduced in v1.2.1. Windows
 internet-zone markings on ZIP-extracted .NET DLLs could prevent the old build
-from opening. The new EXE extracts its dependencies at launch without changing
+from opening. The single-file EXE extracts its dependencies at launch without changing
 Windows security settings. Existing project data in `%LOCALAPPDATA%\OG Studio`
 is kept. You do not need to copy or unblock individual DLLs.
 
@@ -38,3 +38,16 @@ reference photo, and imported clips available when reopening saved projects.
 The download contains no personal projects, songs, photos, account cookies, or
 API keys. VideoExpress generation and rendering use your own account allowances.
 This build is unsigned; Windows may ask you to confirm its publisher.
+
+## Toolbar updates
+
+Use **Check updates** in the top toolbar. If a newer Windows release is available,
+the button changes to **Download v…**. Choose a folder and watch download progress
+at the bottom. GitHub's SHA-256 digest and file size are verified before the EXE is
+saved. Close the running app and open the new EXE yourself; existing user data is
+kept. **Show downloaded update** opens the download folder.
+
+This repository is private. The updater can reuse an existing GitHub credential
+from Git Credential Manager when Git is installed, without prompting or saving a
+new token. Otherwise use **GitHub releases** to sign in and download in your
+browser. No credentials are sent to GitHub's asset CDN.

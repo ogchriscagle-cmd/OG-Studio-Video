@@ -1,4 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
+from app_version import VERSION
 from PyInstaller.utils.hooks import collect_submodules, copy_metadata
 
 
@@ -27,7 +28,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='OG-Studio-v1.2.1-windows-x64',
+    name=f'OG-Studio-v{VERSION}-windows-x64',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

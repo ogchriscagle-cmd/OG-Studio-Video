@@ -2,9 +2,10 @@
 import hashlib
 from pathlib import Path
 from PyInstaller.archive.readers import CArchiveReader
+from app_version import VERSION
 
 root = Path(__file__).resolve().parent
-destination = root / "dist" / "OG-Studio-v1.2.1-windows-x64.exe"
+destination = root / "dist" / f"OG-Studio-v{VERSION}-windows-x64.exe"
 if not destination.is_file():
     raise SystemExit("Build the single-file Windows executable first.")
 archive = CArchiveReader(str(destination))

@@ -133,3 +133,12 @@ tracking JSON with its storyboard. Export copies both files. Existing clips
 generated before tracking was added require manual asset IDs.
 
 Not included: `.venv`, `videoexpress_auth_state.json` (your own login session, generated on first run), build artifacts.
+
+## App updates
+
+The top toolbar shows the running version and **Check updates**. New stable
+Windows releases can be downloaded to a chosen folder with progress and SHA-256
+verification. Open the saved EXE after closing the old one. User data stays in
+`%LOCALAPPDATA%\OG Studio`. The private repository requires GitHub access; the
+app reuses existing Git credentials when available, or provides **GitHub releases**
+for a browser download. It never saves a new GitHub token.

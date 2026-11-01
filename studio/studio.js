@@ -83,6 +83,9 @@ function render(next){
   $('account-status').textContent=({connected:'Connected · sign-in remembered',saved:'Saved sign-in available',missing:'Not signed in',expired:'Sign-in expired',unavailable:'Connection could not be checked'})[account]||'Check connection';
   $('account-detail').textContent=account==='unavailable'?'Your saved session is kept. Try Check connection again when VideoExpress is available.':'OG Studio automatically reuses your saved session for generation, clips, and exports—even after reopening.';
   $('account-login').textContent=['connected','saved'].includes(account)?'Reconnect account':'Sign in & remember';
+  $('app-version').textContent=state.app_version?'v'+state.app_version:'';
+  const update=state.app_update;
+  $('check-updates').textContent=update?.status==='available'?`↓ Download ${update.latest}`:update?.status==='downloaded'?'Show downloaded update':update?.status==='needs_access'?'Sign in on GitHub ↗':update?.status==='manual'?'View update ↗':'↻ Check updates';
   const finalExport=state.final_export;
   $('open-final-video').disabled=!ready||state.busy||finalExport?.status!=='completed';
   $('export-video').textContent=finalExport&&['submitted','submission_unknown','download_pending'].includes(finalExport.status)?'Resume export & download ↓':'Export & download video ↓';
@@ -190,3 +193,6 @@ setInterval(()=>{if(!audio.paused||state.save_error)persistWorkspace();},2000);
 
 $('account-login').onclick=()=>call('login');
 $('account-check').onclick=()=>call('check_videoexpress_login');
+
+$('check-updates').onclick=()=>{const update=state.app_update;call(update?.status==='available'?'download_app_update':update?.status==='downloaded'?'show_app_update':['needs_access','manual'].includes(update?.status)?'open_app_releases':'check_app_update');};
+$('open-releases').onclick=()=>call('open_app_releases');

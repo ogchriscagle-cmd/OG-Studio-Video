@@ -20,6 +20,8 @@ from project_store import read_project, write_project
 from final_export import export_and_download
 from videoexpress_automation import AUTH_STATE_PATH, check_saved_session
 from runtime_paths import ASSET_ROOT, DATA_ROOT
+from app_version import VERSION
+from app_updates import check_update, download_update, RELEASES_URL
 
 ROOT = DATA_ROOT
 
@@ -209,6 +211,7 @@ class StudioAPI:
     def get_state(self):
         with self._lock:
             state = copy.deepcopy(self._state)
+            state["app_version"] = VERSION
             state["account"] = self._state.get("account", "saved" if AUTH_STATE_PATH.exists() else "missing")
             state["tracking"] = {}
             if state["storyboard"]:
@@ -283,7 +286,7 @@ class StudioAPI:
         with self._lock:
             if self._state["busy"]:
                 return {"error": "An operation is already running."}
-            self._state.update(busy=True, status=label, error=None)
+            self._state.update(busy=True, status=label, error=None, download_percent=None)
             try:
                 self._checkpoint()
             except Exception as error:
@@ -572,6 +575,52 @@ class StudioAPI:
         os.startfile(str(path.resolve()))
         return self.get_state()
 
+    def check_app_update(self):
+        def work():
+            info = check_update()
+            with self._lock:
+                self._state["app_update"] = info
+            return {"available": f"OG Studio {info.get('latest')} is available. Click Download update in the toolbar.",
+                    "current": f"OG Studio {VERSION} is up to date.",
+                    "needs_access": "This repository needs GitHub access. Use Open releases to sign in and download in your browser.",
+                    "manual": "A new release is available. Use Open releases to choose its download."}[info["status"]]
+        return self._job("Checking GitHub for OG Studio updates…", work)
+
+    def open_app_releases(self):
+        import webbrowser
+        webbrowser.open(RELEASES_URL)
+        return self.get_state()
+
+    def download_app_update(self):
+        with self._lock:
+            if self._state["busy"]:
+                return {"error": "Wait for the current operation to finish."}
+            info = copy.deepcopy(self._state.get("app_update") or {})
+        if info.get("status") != "available":
+            return {"error": "Check for updates first."}
+        folders = self._window.create_file_dialog(webview.FileDialog.FOLDER)
+        if not folders:
+            return self.get_state()
+        def work():
+            def progress(received, total):
+                with self._lock:
+                    percent = min(100, received * 100 / total) if total else 0
+                    self._state.update(download_percent=percent,
+                        status=f"Downloading OG Studio update · {percent:.0f}% · {received / 1024**2:.1f} / {total / 1024**2:.1f} MB")
+            path = download_update(info, folders[0], progress)
+            with self._lock:
+                self._state["app_update"] = {**info, "status": "downloaded", "path": path}
+            return f"Update verified and saved · {path}. Close OG Studio, then open the new EXE. Your local projects and sign-in are kept."
+        return self._job("Preparing the GitHub update download…", work)
+
+    def show_app_update(self):
+        info = self.get_state().get("app_update") or {}
+        path = Path(info.get("path", ""))
+        if info.get("status") != "downloaded" or not path.is_file():
+            return {"error": "Download an update first."}
+        os.startfile(str(path.resolve().parent))
+        return self.get_state()
+
 
 def serve(api):
     class Handler(BaseHTTPRequestHandler):
@@ -640,7 +689,7 @@ if __name__ == "__main__":
             import numpy as np
             from webview.platforms import edgechromium
             features = librosa.feature.mfcc(y=np.sin(np.arange(44100) * 0.03), sr=22050)
-            report = dict(ok=True, assets=(ASSET_ROOT / "studio/index.html").is_file(),
+            report = dict(ok=True, app_version=VERSION, assets=(ASSET_ROOT / "studio/index.html").is_file(),
                           data_directory=str(DATA_ROOT), torch=torch.__version__, librosa=librosa.__version__,
                           audio_features=list(features.shape))
         except Exception:

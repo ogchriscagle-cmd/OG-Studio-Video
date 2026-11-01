@@ -20,3 +20,5 @@ body{padding-bottom:var(--activity-height,120px)}
 .final-export{border-top:1px solid var(--line);margin-top:22px;padding-top:20px}.final-export h3{font-size:14px;font-weight:600;margin:0}.final-export h3 small{color:var(--muted);font-size:10px;margin-right:8px}.final-export .workflow-row label{margin:0;min-width:130px}.final-export .hint{overflow-wrap:anywhere}
 
 #download-progress{width:100%;height:8px;margin-top:10px;accent-color:var(--lime)}
+
+header{gap:12px;flex-wrap:wrap;height:auto;min-height:58px}.project-actions{flex-wrap:wrap;justify-content:flex-end}
