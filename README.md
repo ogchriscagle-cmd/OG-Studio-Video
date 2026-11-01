@@ -1,8 +1,8 @@
 # Music Video Storyboard -> VideoExpress Automation
 
-Windows users can extract the GitHub release ZIP and run `OG Studio.exe` without
+Windows users can run the single-file GitHub release EXE without
 installing Python. See [release instructions](RELEASE-NOTES.md). Developers can
-build the same ZIP with `powershell -ExecutionPolicy Bypass -File "Build Windows Release.ps1"`
+build the same EXE with `powershell -ExecutionPolicy Bypass -File "Build Windows Release.ps1"`
 after installing the project requirements in `.venv`.
 
 - `app.py` - Tkinter GUI

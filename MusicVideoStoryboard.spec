@@ -24,9 +24,10 @@ pyz = PYZ(a.pure)
 exe = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.datas,
     [],
-    exclude_binaries=True,
-    name='OG Studio',
+    name='OG-Studio-v1.2.1-windows-x64',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -37,13 +38,4 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-)
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name='OG Studio',
 )

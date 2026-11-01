@@ -1,22 +1,21 @@
-"""Package only the clean PyInstaller distribution, never workspace data."""
+"""Audit the single-file release and generate its SHA-256 checksum."""
 import hashlib
 from pathlib import Path
-import zipfile
+from PyInstaller.archive.readers import CArchiveReader
 
 root = Path(__file__).resolve().parent
-distribution = root / "dist" / "OG Studio"
-destination = root / "dist" / "OG-Studio-v1.2-windows-x64.zip"
-if not (distribution / "OG Studio.exe").is_file():
-    raise SystemExit("Build OG Studio.exe first.")
+destination = root / "dist" / "OG-Studio-v1.2.1-windows-x64.exe"
+if not destination.is_file():
+    raise SystemExit("Build the single-file Windows executable first.")
+archive = CArchiveReader(str(destination))
 blocked = {"videoexpress_auth_state.json", ".studio-session.json", "videoexpress_run_log.json"}
-files = sorted(path for path in distribution.rglob("*") if path.is_file())
-for path in files:
-    relative = path.relative_to(distribution)
-    if path.name in blocked or any(part in {".models", "output", "debug", ".git"} for part in relative.parts[:2]):
-        raise SystemExit(f"Private runtime data must not be packaged: {relative}")
-with zipfile.ZipFile(destination, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as archive:
-    for path in files:
-        archive.write(path, path.relative_to(distribution.parent))
-digest = hashlib.file_digest(destination.open("rb"), "sha256").hexdigest()
-destination.with_suffix(".zip.sha256").write_text(f"{digest}  {destination.name}\n", encoding="utf-8")
-print(f"Created {destination.name} ({destination.stat().st_size / 1024**2:.1f} MB)")
+for name in archive.toc:
+    relative = Path(name)
+    if relative.name in blocked or any(part in {".models", "output", "debug", ".git"} for part in relative.parts[:2]):
+        raise SystemExit(f"Private runtime data must not be packaged: {name}")
+if not any(name.replace(chr(92), '/') == 'studio/index.html' for name in archive.toc):
+    raise SystemExit("The executable is missing the studio interface.")
+with destination.open("rb") as content:
+    digest = hashlib.file_digest(content, "sha256").hexdigest()
+destination.with_suffix(".exe.sha256").write_text(f"{digest}  {destination.name}" + chr(10), encoding="utf-8")
+print(f"Audited {destination.name} ({destination.stat().st_size / 1024**2:.1f} MB)")

@@ -1,14 +1,20 @@
-# OG Studio v1.2 for Windows
+# OG Studio v1.2.1 for Windows
 
 Create a music-video storyboard, keep a consistent character, generate scenes in
 VideoExpress, import clips, assemble the final project, and export its MP4.
 
 ## Install
 
-1. Download `OG-Studio-v1.2-windows-x64.zip` from this release.
-2. Extract the entire ZIP to a folder. Keep `OG Studio.exe` and `_internal` together.
-3. Open `OG Studio.exe`. Python is not required.
+1. Download `OG-Studio-v1.2.1-windows-x64.exe` from this release.
+2. Open the EXE. Python and a separate `_internal` folder are not required.
+3. Wait for the bundled files to unpack and the app to open. Startup can take a minute.
 4. Use the VideoExpress account card to sign in once on your computer.
+
+This hotfix replaces the v1.2 folder ZIP with a single-file executable. Windows
+internet-zone markings on ZIP-extracted .NET DLLs could prevent the old build
+from opening. The new EXE extracts its dependencies at launch without changing
+Windows security settings. Existing project data in `%LOCALAPPDATA%\OG Studio`
+is kept. You do not need to copy or unblock individual DLLs.
 
 Windows 10/11, 64-bit, with Microsoft Edge WebView2 Runtime and Google Chrome
 installed. Appearance drafting downloads its local AI model on first use;
