@@ -9,10 +9,19 @@ import time
 from urllib.parse import urlparse, urljoin
 
 import requests
-from app_version import VERSION
+from app_version import VERSION, RELEASE_PREFIX
 
-RELEASES_URL = "https://github.com/ogchriscagle-cmd/video/releases"
-API = "https://api.github.com/repos/ogchriscagle-cmd/video"
+RELEASES_URL = "https://github.com/ogchriscagle-cmd/OG-Studio-Video/releases"
+# The repository ID remains the same when its display name or URL changes.
+API = "https://api.github.com/repositories/1440479078"
+ASSET_API_PREFIXES = (API, "https://api.github.com/repos/ogchriscagle-cmd/OG-Studio-Video",
+                      "https://api.github.com/repos/ogchriscagle-cmd/video")
+
+
+def release_names(version):
+    version_tuple(version)
+    tag = 'v' + version.removeprefix('v')
+    return tuple(f"{prefix}-{tag}-windows-x64.exe" for prefix in (RELEASE_PREFIX, "OG-Studio"))
 
 
 def version_tuple(value):
@@ -40,7 +49,7 @@ def github_token():
 
 def api_headers(token=None, binary=False):
     headers = {"Accept": "application/octet-stream" if binary else "application/vnd.github+json",
-               "User-Agent": "OG-Studio-Updater/" + VERSION}
+               "User-Agent": "OG-Studio-Video-Updater/" + VERSION}
     if token:
         headers["Authorization"] = "Bearer " + token
     return headers
@@ -80,14 +89,13 @@ def check_update():
                 raise ValueError("No stable release available.")
             if version_tuple(version) <= version_tuple(VERSION):
                 return dict(status="current", current=VERSION, latest=version)
-            name = f"OG-Studio-{version if version.startswith('v') else 'v'+version}-windows-x64.exe"
             assets = {a["name"]: a for a in release.get("assets", []) if a.get("state") == "uploaded"}
-            asset = assets.get(name)
+            asset = next((assets[name] for name in release_names(version) if name in assets), None)
             if not asset or not re.fullmatch(r"sha256:[0-9a-fA-F]{64}", asset.get("digest") or ""):
                 return dict(status="manual", current=VERSION, latest=version)
-            if asset.get("url") != API + "/releases/assets/" + str(asset["id"]):
+            if asset.get("url") not in tuple(base + "/releases/assets/" + str(asset["id"]) for base in ASSET_API_PREFIXES):
                 raise ValueError("Unexpected update asset URL.")
-            return dict(status="available", current=VERSION, latest=version, name=name,
+            return dict(status="available", current=VERSION, latest=version, name=asset["name"],
                         asset_id=int(asset["id"]), sha256=asset["digest"][7:].lower(), size=int(asset["size"]))
     except (requests.RequestException, ValueError, KeyError, TypeError):
         raise RuntimeError("Could not check GitHub releases. Try again later or use Open releases.") from None
@@ -96,9 +104,7 @@ def check_update():
 def download_update(info, folder, progress):
     if info.get("status") != "available":
         raise RuntimeError("Check for updates before downloading.")
-    version_tuple(info['latest'])
-    expected_name = f"OG-Studio-v{info['latest'].removeprefix('v')}-windows-x64.exe"
-    if info["name"] != expected_name or not re.fullmatch(r"[0-9a-f]{64}", info["sha256"]):
+    if info["name"] not in release_names(info['latest']) or not re.fullmatch(r"[0-9a-f]{64}", info["sha256"]):
         raise RuntimeError("Invalid update metadata. Check for updates again.")
     path = Path(folder) / info["name"]
     partial = path.with_suffix(".exe.part")

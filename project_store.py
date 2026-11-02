@@ -43,10 +43,10 @@ def read_project(path):
         raise ValueError("This project file is too large.")
     data = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
-        raise ValueError("Choose an OG Studio project or an exported storyboard JSON file.")
+        raise ValueError("Choose an OG Studio Video project or an exported storyboard JSON file.")
     if data.get("format") == "og-studio-project":
         if data.get("version") != 1 or not isinstance(data.get("state"), dict):
-            raise ValueError("This OG Studio project version is not supported.")
+            raise ValueError("This OG Studio Video project version is not supported.")
         board = data["state"].get("storyboard")
     else:
         board = data

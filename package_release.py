@@ -3,10 +3,10 @@ import hashlib
 import ssl
 from pathlib import Path
 from PyInstaller.archive.readers import CArchiveReader
-from app_version import VERSION
+from app_version import VERSION, RELEASE_PREFIX
 
 root = Path(__file__).resolve().parent
-destination = root / "dist" / f"OG-Studio-v{VERSION}-windows-x64.exe"
+destination = root / "dist" / f"{RELEASE_PREFIX}-v{VERSION}-windows-x64.exe"
 if not destination.is_file():
     raise SystemExit("Build the single-file Windows executable first.")
 archive = CArchiveReader(str(destination))

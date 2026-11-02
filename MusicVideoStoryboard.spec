@@ -1,9 +1,10 @@
 # -*- mode: python ; coding: utf-8 -*-
-from app_version import VERSION
+from app_version import VERSION, APP_NAME, RELEASE_PREFIX
 from PyInstaller.utils.hooks import collect_submodules, copy_metadata
 from pathlib import Path
 import ssl
 from build_splash import StudioSplash, splash_image
+from build_metadata import windows_version
 
 # Some Python distributions extend SSLContext to load this trust-policy file
 # beside ssl.py. Keep that runtime requirement intact in frozen applications.
@@ -32,7 +33,7 @@ pyz = PYZ(a.pure)
 splash = StudioSplash(
     splash_image('build/startup-splash.png'), a.binaries, a.datas,
     text_pos=(36, 215), text_size=12, text_font='TkDefaultFont', text_color='#d9e6cf',
-    text_default='Starting OG Studio...', always_on_top=False, center='active',
+    text_default='Starting OG Studio Video...', always_on_top=False, center='active',
     minify_script=False,
 )
 
@@ -44,7 +45,8 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name=f'OG-Studio-v{VERSION}-windows-x64',
+    name=f'{RELEASE_PREFIX}-v{VERSION}-windows-x64',
+    version=windows_version(APP_NAME, VERSION, f'{RELEASE_PREFIX}-v{VERSION}-windows-x64.exe'),
     icon='assets/og-studio.ico',
     debug=False,
     bootloader_ignore_signals=False,

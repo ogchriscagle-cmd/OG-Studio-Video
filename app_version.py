@@ -1,1 +1,3 @@
-VERSION = "1.5.0"
+VERSION = "1.6.0"
+APP_NAME = "OG Studio Video"
+RELEASE_PREFIX = "OG-Studio-Video"

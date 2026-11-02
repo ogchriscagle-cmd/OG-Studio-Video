@@ -1,4 +1,4 @@
-# Music Video Storyboard -> VideoExpress Automation
+# OG Studio Video
 
 Windows users can run the single-file GitHub release EXE without
 installing Python. See [release instructions](RELEASE-NOTES.md). Developers can
@@ -27,9 +27,9 @@ desktop app and are recorded in `videoexpress_run_log.json`. Successfully
 submitted scenes may continue rendering even if other scenes fail. The command
 line supports `--start-scene` and `--end-scene` to retry a specific range.
 
-## OG Studio desktop interface
+## OG Studio Video desktop interface
 
-Run `Launch OG Studio.cmd` or `python studio_app.py`. The new HTML/CSS interface
+Run `Launch OG Studio Video.cmd` or `python studio_app.py`. The new HTML/CSS interface
 runs in a local desktop window using pywebview and Microsoft's WebView2 runtime.
 The original Tkinter interface remains available with `python app.py`.
 
@@ -96,7 +96,7 @@ exact media asset identity. **Assemble tracked clips** becomes available when
 every scene has a unique confirmed clip. It uses storyboard order, never upload
 order or newest-clip guesses. Keep one song in the project folder and start
 assembly with an empty editor timeline. Manual asset IDs remain available under
-advanced settings for media generated outside OG Studio.
+advanced settings for media generated outside OG Studio Video.
 
 Each scene also has **Auto-import clip ↓**. Once its VideoExpress match is ready,
 click it to download the exact rendered video into `clips/` beneath your output
@@ -139,7 +139,7 @@ Not included: `.venv`, `videoexpress_auth_state.json` (your own login session, g
 The top toolbar shows the running version and **Check updates**. New stable
 Windows releases can be downloaded to a chosen folder with progress and SHA-256
 verification. Open the saved EXE after closing the old one. User data stays in
-`%LOCALAPPDATA%\OG Studio`. The private repository requires GitHub access; the
+`%LOCALAPPDATA%\OG Studio`. When GitHub requires account access, the
 app reuses existing Git credentials when available, or provides **GitHub releases**
 for a browser download. It never saves a new GitHub token.
 
@@ -157,3 +157,9 @@ location, and camera movement. The direction summary updates as you edit. Create
 a storyboard to apply these choices; image and motion prompts remain editable.
 Settings autosave with the project and are included in storyboard JSON exports.
 Follow song uses automatic mood and camera choices that vary by track energy.
+
+## Project name
+
+The app and GitHub project are named **OG Studio Video**. Existing application
+data stays in `%LOCALAPPDATA%\OG Studio` for compatibility. The current Windows
+EXE uses the filename `OG-Studio-Video-v1.6.0-windows-x64.exe`.

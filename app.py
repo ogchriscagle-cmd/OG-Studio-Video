@@ -1,5 +1,5 @@
 """
-Music Video Storyboard Generator - Windows desktop app.
+OG Studio Video - Windows desktop app.
 Analyzes an mp3/wav, builds a scene storyboard, and opens VideoExpress.ai
 so you can paste the generated prompts in order.
 """
@@ -17,7 +17,7 @@ from analyze import analyze_song
 from storyboard import build_storyboard, write_outputs
 from videoexpress_automation import setup_project_folder, run_batch, assemble_final_video
 
-APP_TITLE = "Music Video Storyboard Generator"
+APP_TITLE = "OG Studio Video"
 VIDEOEXPRESS_URL = "https://app.videoexpress.ai/"
 
 

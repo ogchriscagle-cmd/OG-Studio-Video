@@ -17,6 +17,7 @@ def splash_image(path):
     draw.polygon([(36, 50), (46, 40), (56, 50), (46, 60)], outline="#c9ef65", width=2)
     draw.text((70, 27), "OG", font=font(34, True), fill="#f3f5ed")
     draw.text((123, 29), "STUDIO", font=font(31), fill="#9fac9c")
+    draw.text((244, 29), "VIDEO", font=font(31), fill="#c9ef65")
     draw.text((36, 103), "Your music. In motion.", font=font(32, True), fill="#f3f5ed")
     draw.text((36, 153), "Preparing your creative workspace", font=font(16), fill="#a9b5a4")
     draw.text((36, 267), "Your project files stay saved.", font=font(12), fill="#87977f")
@@ -32,7 +33,7 @@ class StudioSplash(Splash):
     def generate_script(self):
         script = super().generate_script()
         script += r'''
-wm title . "OG Studio is opening"
+wm title . "OG Studio Video is opening"
 set startup_file_count 0
 set startup_started [clock milliseconds]
 .root.canvas create rectangle 36 232 604 238 -fill #303c31 -outline {}

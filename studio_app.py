@@ -1,6 +1,6 @@
-"""OG Studio desktop shell. Python work runs outside the UI thread."""
+"""OG Studio Video desktop shell. Python work runs outside the UI thread."""
 from startup_progress import startup_stage, close_startup
-startup_stage(68, "Starting OG Studio...")
+startup_stage(68, "Starting OG Studio Video...")
 import copy
 import json
 import mimetypes
@@ -104,7 +104,7 @@ class StudioAPI:
 
     def save_project(self):
         paths = self._window.create_file_dialog(webview.FileDialog.SAVE,
-            save_filename="My project.ogstudio.json", file_types=("OG Studio project (*.ogstudio.json)",))
+            save_filename="My project.ogstudio.json", file_types=("OG Studio Video project (*.ogstudio.json)",))
         if not paths:
             return self.get_state()
         path = Path(paths if isinstance(paths, str) else paths[0])
@@ -124,7 +124,7 @@ class StudioAPI:
             if self._state["busy"]:
                 return {"error": "Wait for the current operation to finish before opening a project."}
         paths = self._window.create_file_dialog(webview.FileDialog.OPEN,
-            file_types=("OG Studio projects and storyboards (*.json)",))
+            file_types=("OG Studio Video projects and storyboards (*.json)",))
         if not paths:
             return self.get_state()
         try:
@@ -592,11 +592,11 @@ class StudioAPI:
             info = check_update()
             with self._lock:
                 self._state["app_update"] = info
-            return {"available": f"OG Studio {info.get('latest')} is available. Click Download update in the toolbar.",
-                    "current": f"OG Studio {VERSION} is up to date.",
+            return {"available": f"OG Studio Video {info.get('latest')} is available. Click Download update in the toolbar.",
+                    "current": f"OG Studio Video {VERSION} is up to date.",
                     "needs_access": "This repository needs GitHub access. Use Open releases to sign in and download in your browser.",
                     "manual": "A new release is available. Use Open releases to choose its download."}[info["status"]]
-        return self._job("Checking GitHub for OG Studio updates…", work)
+        return self._job("Checking GitHub for OG Studio Video updates…", work)
 
     def open_app_releases(self):
         import webbrowser
@@ -618,11 +618,11 @@ class StudioAPI:
                 with self._lock:
                     percent = min(100, received * 100 / total) if total else 0
                     self._state.update(download_percent=percent,
-                        status=f"Downloading OG Studio update · {percent:.0f}% · {received / 1024**2:.1f} / {total / 1024**2:.1f} MB")
+                        status=f"Downloading OG Studio Video update · {percent:.0f}% · {received / 1024**2:.1f} / {total / 1024**2:.1f} MB")
             path = download_update(info, folders[0], progress)
             with self._lock:
                 self._state["app_update"] = {**info, "status": "downloaded", "path": path}
-            return f"Update verified and saved · {path}. Close OG Studio, then open the new EXE. Your local projects and sign-in are kept."
+            return f"Update verified and saved · {path}. Close OG Studio Video, then open the new EXE. Your local projects and sign-in are kept."
         return self._job("Preparing the GitHub update download…", work)
 
     def show_app_update(self):
@@ -722,7 +722,7 @@ if __name__ == "__main__":
     startup_stage(89, "Restoring your workspace...")
     api = StudioAPI(ROOT / ".studio-session.json")
     server = serve(api)
-    api._window = webview.create_window("OG Studio · Music to motion", f"http://127.0.0.1:{server.server_port}",
+    api._window = webview.create_window("OG Studio Video · Music to motion", f"http://127.0.0.1:{server.server_port}",
                                        js_api=api, width=1380, height=900, min_size=(1000, 700), background_color="#101113")
     api._window.events.closing += api._on_closing
     def window_loaded():

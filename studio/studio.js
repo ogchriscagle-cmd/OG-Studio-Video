@@ -29,7 +29,7 @@ function updateActivity(){
 }
 function showError(message){$('error').textContent=message||'';$('error').hidden=!message;updateActivity();}
 async function call(method,...args){
-  if(!ready){showError('Open OG Studio using the desktop launcher to connect to Python.');return;}
+  if(!ready){showError('Open OG Studio Video using the desktop launcher to connect to Python.');return;}
   try{if(method!=='get_state')await persistWorkspace();const result=await window.pywebview.api[method](...args);if(result.error&&!('busy' in result)){showError(result.error);return;}render(result);}
   catch(error){showError(String(error));}
 }
@@ -85,7 +85,7 @@ function render(next){
   $('import-all-clips').disabled=!ready||state.busy||matched===0;
   const account=state.account||'missing';
   $('account-status').textContent=({connected:'Connected · sign-in remembered',saved:'Saved sign-in available',missing:'Not signed in',expired:'Sign-in expired',unavailable:'Connection could not be checked'})[account]||'Check connection';
-  $('account-detail').textContent=account==='unavailable'?'Your saved session is kept. Try Check connection again when VideoExpress is available.':'OG Studio automatically reuses your saved session for generation, clips, and exports—even after reopening.';
+  $('account-detail').textContent=account==='unavailable'?'Your saved session is kept. Try Check connection again when VideoExpress is available.':'OG Studio Video automatically reuses your saved session for generation, clips, and exports—even after reopening.';
   $('account-login').textContent=['connected','saved'].includes(account)?'Reconnect account':'Sign in & remember';
   $('app-version').textContent=state.app_version?'v'+state.app_version:'';
   const update=state.app_update;
@@ -184,7 +184,7 @@ audio.addEventListener('timeupdate',()=>syncPreview());audio.addEventListener('l
 audio.addEventListener('error',()=>showError('This audio format cannot be previewed by the desktop browser. WAV or MP3 is recommended; analysis may still work.'));
 video.addEventListener('error',()=>showError('This clip format cannot be previewed. Try an MP4 encoded with H.264.'));
 $('seek').oninput=()=>{if(Number.isFinite(audio.duration)){audio.currentTime=Number($('seek').value)/100*audio.duration;syncPreview(true);}};
-async function connect(){ready=true;$('bridge-warning').hidden=true;await call('get_state');if(window.pywebview.api.ui_ready)await window.pywebview.api.ui_ready();setInterval(async()=>{if(polling)return;polling=true;try{const next=await window.pywebview.api.get_state();if(JSON.stringify(next)!==JSON.stringify(state))render(next);}catch(e){showError('Desktop connection lost. Restart OG Studio.');}finally{polling=false;}},800);}
+async function connect(){ready=true;$('bridge-warning').hidden=true;await call('get_state');if(window.pywebview.api.ui_ready)await window.pywebview.api.ui_ready();setInterval(async()=>{if(polling)return;polling=true;try{const next=await window.pywebview.api.get_state();if(JSON.stringify(next)!==JSON.stringify(state))render(next);}catch(e){showError('Desktop connection lost. Restart OG Studio Video.');}finally{polling=false;}},800);}
 window.addEventListener('pywebviewready',connect,{once:true});
 document.querySelectorAll('button').forEach(b=>b.disabled=true);
 setTimeout(()=>{if(!ready)$('bridge-warning').hidden=false;},2500);
