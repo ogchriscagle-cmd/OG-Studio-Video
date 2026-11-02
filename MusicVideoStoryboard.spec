@@ -15,7 +15,7 @@ a = Analysis(
     ['studio_app.py'],
     pathex=[],
     binaries=[],
-    datas=[('studio', 'studio')] + ssl_datas + copy_metadata('transformers') + copy_metadata('huggingface-hub'),
+    datas=[('studio', 'studio'), ('assets/og-studio.ico', 'assets')] + ssl_datas + copy_metadata('transformers') + copy_metadata('huggingface-hub'),
     hiddenimports=collect_submodules('transformers.models.blip') + [
         'transformers.models.bert.tokenization_bert',
         'transformers.models.bert.tokenization_bert_fast',
@@ -45,6 +45,7 @@ exe = EXE(
     a.datas,
     [],
     name=f'OG-Studio-v{VERSION}-windows-x64',
+    icon='assets/og-studio.ico',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

@@ -718,6 +718,9 @@ if __name__ == "__main__":
             report = dict(ok=False, error=traceback.format_exc())
         Path(sys.argv[2]).write_text(json.dumps(report), encoding="utf-8")
         sys.exit(0 if report["ok"] and report.get("assets") else 1)
+    if os.name == "nt":
+        import ctypes
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("OGStudio.Desktop")
     startup_stage(89, "Restoring your workspace...")
     api = StudioAPI(ROOT / ".studio-session.json")
     server = serve(api)
@@ -732,7 +735,7 @@ if __name__ == "__main__":
         fallback.start()
     api._window.events.loaded += window_loaded
     try:
-        webview.start(gui="edgechromium")
+        webview.start(gui="edgechromium", icon=str(ASSET_ROOT / "assets/og-studio.ico"))
     finally:
         close_startup()
         server.shutdown()
