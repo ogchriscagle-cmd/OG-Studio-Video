@@ -1,4 +1,8 @@
-# Music Video Storyboard -> VideoExpress Automation
+# OG Studio Video
+
+Create music-video storyboards and bring them to life with VideoExpress.
+
+[Download OG Studio Video for Windows](https://github.com/ogchriscagle-cmd/OG-Studio-Video/releases/latest)
 
 - `app.py` - Tkinter GUI
 - `videoexpress_automation.py` - Playwright automation driving app.videoexpress.ai
