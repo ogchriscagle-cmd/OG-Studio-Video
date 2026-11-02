@@ -1,11 +1,11 @@
-# OG Studio v1.3.1 for Windows
+# OG Studio v1.4.0 for Windows
 
 Create a music-video storyboard, keep a consistent character, generate scenes in
 VideoExpress, import clips, assemble the final project, and export its MP4.
 
 ## Install
 
-1. Download `OG-Studio-v1.3.1-windows-x64.exe` from this release.
+1. Download `OG-Studio-v1.4.0-windows-x64.exe` from this release.
 2. Open the EXE. Python and a separate `_internal` folder are not required.
 3. Wait for the bundled files to unpack and the app to open. Startup can take a minute.
 4. Use the VideoExpress account card to sign in once on your computer.
@@ -59,3 +59,12 @@ build the Windows EXE. Its absence caused packaged HTTPS requests to fail before
 GitHub could respond, despite development-mode checks working. Updates now retry
 temporary connection failures and report clearer connection errors. Publication
 is gated on a live GitHub check performed by the final packaged EXE.
+
+## Startup splash
+
+A native OG Studio splash opens while the single-file EXE unpacks, before Python
+starts. It shows unpacking activity, a stage-based progress bar, and elapsed
+seconds. Stages cover loading studio tools, restoring the workspace, and opening
+the main window. It closes when the desktop connection is ready. Startup progress
+is based on files and completed stages, not an estimated time remaining. Audio
+analysis libraries now load when creating a storyboard instead of at launch.

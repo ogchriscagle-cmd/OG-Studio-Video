@@ -1,4 +1,6 @@
 """OG Studio desktop shell. Python work runs outside the UI thread."""
+from startup_progress import startup_stage, close_startup
+startup_stage(68, "Starting OG Studio...")
 import copy
 import json
 import mimetypes
@@ -9,9 +11,10 @@ import threading
 import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+startup_stage(75, "Loading the desktop window...")
 import webview
 
-from analyze import analyze_song
+startup_stage(82, "Loading studio tools...")
 from storyboard import build_storyboard, write_outputs
 from videoexpress_automation import do_login, setup_project_folder, run_batch, assemble_final_video, refresh_clip_tracking, download_tracked_clip, view_final_project
 from clip_tracking import load_tracking, ordered_asset_ids, tracking_path, save_tracking
@@ -24,6 +27,12 @@ from app_version import VERSION
 from app_updates import check_update, download_update, RELEASES_URL
 
 ROOT = DATA_ROOT
+
+
+def analyze_song(*args, **kwargs):
+    # Audio analysis is only needed when the user creates a storyboard.
+    from analyze import analyze_song as run_analysis
+    return run_analysis(*args, **kwargs)
 
 
 def safe_error(error):
@@ -40,6 +49,11 @@ STYLES = {
 
 
 class StudioAPI:
+    def ui_ready(self):
+        startup_stage(100, "Ready")
+        close_startup()
+        return {"ready": True}
+
     def __init__(self, session_path=None):
         self._window = None
         self._lock = threading.RLock()
@@ -704,12 +718,21 @@ if __name__ == "__main__":
             report = dict(ok=False, error=traceback.format_exc())
         Path(sys.argv[2]).write_text(json.dumps(report), encoding="utf-8")
         sys.exit(0 if report["ok"] and report.get("assets") else 1)
+    startup_stage(89, "Restoring your workspace...")
     api = StudioAPI(ROOT / ".studio-session.json")
     server = serve(api)
     api._window = webview.create_window("OG Studio · Music to motion", f"http://127.0.0.1:{server.server_port}",
                                        js_api=api, width=1380, height=900, min_size=(1000, 700), background_color="#101113")
     api._window.events.closing += api._on_closing
+    def window_loaded():
+        startup_stage(96, "Opening your workspace...")
+        # Let a visible bridge error be reviewed if initialization fails.
+        fallback = threading.Timer(12, close_startup)
+        fallback.daemon = True
+        fallback.start()
+    api._window.events.loaded += window_loaded
     try:
         webview.start(gui="edgechromium")
     finally:
+        close_startup()
         server.shutdown()

@@ -10,6 +10,8 @@ destination = root / "dist" / f"OG-Studio-v{VERSION}-windows-x64.exe"
 if not destination.is_file():
     raise SystemExit("Build the single-file Windows executable first.")
 archive = CArchiveReader(str(destination))
+if not any(record[-1] == 'l' for record in archive.toc.values()):
+    raise SystemExit("The executable is missing its early startup splash resource.")
 ssl_policy = Path(ssl.__file__).with_name('codex-rejected-cas.pem')
 if ssl_policy.is_file() and 'codex-rejected-cas.pem' not in archive.toc:
     raise SystemExit("The executable is missing the Python HTTPS certificate policy file.")

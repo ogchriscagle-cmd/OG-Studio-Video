@@ -142,3 +142,10 @@ verification. Open the saved EXE after closing the old one. User data stays in
 `%LOCALAPPDATA%\OG Studio`. The private repository requires GitHub access; the
 app reuses existing Git credentials when available, or provides **GitHub releases**
 for a browser download. It never saves a new GitHub token.
+
+## Startup feedback
+
+The Windows EXE shows a native startup splash during unpacking and initialization,
+with stage progress and elapsed time. Audio-analysis imports are deferred until
+you create a storyboard. The splash closes after the studio interface connects.
+For automated checks, set `PYINSTALLER_SUPPRESS_SPLASH_SCREEN=1` to suppress it.

@@ -3,6 +3,7 @@ from app_version import VERSION
 from PyInstaller.utils.hooks import collect_submodules, copy_metadata
 from pathlib import Path
 import ssl
+from build_splash import StudioSplash, splash_image
 
 # Some Python distributions extend SSLContext to load this trust-policy file
 # beside ssl.py. Keep that runtime requirement intact in frozen applications.
@@ -28,10 +29,18 @@ a = Analysis(
     optimize=0,
 )
 pyz = PYZ(a.pure)
+splash = StudioSplash(
+    splash_image('build/startup-splash.png'), a.binaries, a.datas,
+    text_pos=(36, 215), text_size=12, text_font='TkDefaultFont', text_color='#d9e6cf',
+    text_default='Starting OG Studio...', always_on_top=False, center='active',
+    minify_script=False,
+)
 
 exe = EXE(
     pyz,
     a.scripts,
+    splash,
+    splash.binaries,
     a.binaries,
     a.datas,
     [],

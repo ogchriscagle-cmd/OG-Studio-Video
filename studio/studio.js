@@ -179,7 +179,7 @@ audio.addEventListener('timeupdate',()=>syncPreview());audio.addEventListener('l
 audio.addEventListener('error',()=>showError('This audio format cannot be previewed by the desktop browser. WAV or MP3 is recommended; analysis may still work.'));
 video.addEventListener('error',()=>showError('This clip format cannot be previewed. Try an MP4 encoded with H.264.'));
 $('seek').oninput=()=>{if(Number.isFinite(audio.duration)){audio.currentTime=Number($('seek').value)/100*audio.duration;syncPreview(true);}};
-async function connect(){ready=true;$('bridge-warning').hidden=true;await call('get_state');setInterval(async()=>{if(polling)return;polling=true;try{const next=await window.pywebview.api.get_state();if(JSON.stringify(next)!==JSON.stringify(state))render(next);}catch(e){showError('Desktop connection lost. Restart OG Studio.');}finally{polling=false;}},800);}
+async function connect(){ready=true;$('bridge-warning').hidden=true;await call('get_state');if(window.pywebview.api.ui_ready)await window.pywebview.api.ui_ready();setInterval(async()=>{if(polling)return;polling=true;try{const next=await window.pywebview.api.get_state();if(JSON.stringify(next)!==JSON.stringify(state))render(next);}catch(e){showError('Desktop connection lost. Restart OG Studio.');}finally{polling=false;}},800);}
 window.addEventListener('pywebviewready',connect,{once:true});
 document.querySelectorAll('button').forEach(b=>b.disabled=true);
 setTimeout(()=>{if(!ready)$('bridge-warning').hidden=false;},2500);
