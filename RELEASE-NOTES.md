@@ -1,11 +1,11 @@
-# OG Studio v1.3.0 for Windows
+# OG Studio v1.3.1 for Windows
 
 Create a music-video storyboard, keep a consistent character, generate scenes in
 VideoExpress, import clips, assemble the final project, and export its MP4.
 
 ## Install
 
-1. Download `OG-Studio-v1.3.0-windows-x64.exe` from this release.
+1. Download `OG-Studio-v1.3.1-windows-x64.exe` from this release.
 2. Open the EXE. Python and a separate `_internal` folder are not required.
 3. Wait for the bundled files to unpack and the app to open. Startup can take a minute.
 4. Use the VideoExpress account card to sign in once on your computer.
@@ -51,3 +51,11 @@ This repository is private. The updater can reuse an existing GitHub credential
 from Git Credential Manager when Git is installed, without prompting or saving a
 new token. Otherwise use **GitHub releases** to sign in and download in your
 browser. No GitHub account credentials are sent to the asset CDN.
+
+## v1.3.1 HTTPS hotfix
+
+Includes the certificate policy file required by the Python runtime used to
+build the Windows EXE. Its absence caused packaged HTTPS requests to fail before
+GitHub could respond, despite development-mode checks working. Updates now retry
+temporary connection failures and report clearer connection errors. Publication
+is gated on a live GitHub check performed by the final packaged EXE.

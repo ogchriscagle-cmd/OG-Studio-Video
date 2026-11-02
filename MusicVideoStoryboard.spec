@@ -1,13 +1,20 @@
 # -*- mode: python ; coding: utf-8 -*-
 from app_version import VERSION
 from PyInstaller.utils.hooks import collect_submodules, copy_metadata
+from pathlib import Path
+import ssl
+
+# Some Python distributions extend SSLContext to load this trust-policy file
+# beside ssl.py. Keep that runtime requirement intact in frozen applications.
+ssl_policy = Path(ssl.__file__).with_name('codex-rejected-cas.pem')
+ssl_datas = [(str(ssl_policy), '.')] if ssl_policy.is_file() else []
 
 
 a = Analysis(
     ['studio_app.py'],
     pathex=[],
     binaries=[],
-    datas=[('studio', 'studio')] + copy_metadata('transformers') + copy_metadata('huggingface-hub'),
+    datas=[('studio', 'studio')] + ssl_datas + copy_metadata('transformers') + copy_metadata('huggingface-hub'),
     hiddenimports=collect_submodules('transformers.models.blip') + [
         'transformers.models.bert.tokenization_bert',
         'transformers.models.bert.tokenization_bert_fast',

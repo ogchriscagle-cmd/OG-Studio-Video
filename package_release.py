@@ -1,5 +1,6 @@
 """Audit the single-file release and generate its SHA-256 checksum."""
 import hashlib
+import ssl
 from pathlib import Path
 from PyInstaller.archive.readers import CArchiveReader
 from app_version import VERSION
@@ -9,6 +10,9 @@ destination = root / "dist" / f"OG-Studio-v{VERSION}-windows-x64.exe"
 if not destination.is_file():
     raise SystemExit("Build the single-file Windows executable first.")
 archive = CArchiveReader(str(destination))
+ssl_policy = Path(ssl.__file__).with_name('codex-rejected-cas.pem')
+if ssl_policy.is_file() and 'codex-rejected-cas.pem' not in archive.toc:
+    raise SystemExit("The executable is missing the Python HTTPS certificate policy file.")
 blocked = {"videoexpress_auth_state.json", ".studio-session.json", "videoexpress_run_log.json"}
 for name in archive.toc:
     relative = Path(name)

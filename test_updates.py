@@ -6,6 +6,22 @@ from unittest.mock import MagicMock, patch
 import app_updates as update
 
 class UpdateTests(unittest.TestCase):
+    def test_retry_after_temporary_connection_failure(self):
+        session=MagicMock()
+        response=MagicMock(status_code=200)
+        session.get.side_effect=[update.requests.ConnectionError("offline"),response]
+        with patch.object(update.time,'sleep'):
+            self.assertIs(update.release_response(session,{}),response)
+        self.assertEqual(session.get.call_count,2)
+
+    def test_exhausted_connection_has_clear_error(self):
+        session=MagicMock()
+        session.get.side_effect=update.requests.ConnectionError("private transport details")
+        with patch.object(update.time,'sleep'):
+            with self.assertRaisesRegex(RuntimeError,'three attempts') as failure:
+                update.release_response(session,{})
+        self.assertNotIn('private transport',str(failure.exception))
+
     def info(self, data=b'MZtest'):
         return dict(status='available',latest='v1.4.0',name='OG-Studio-v1.4.0-windows-x64.exe',asset_id=8,size=len(data),sha256=hashlib.sha256(data).hexdigest())
 

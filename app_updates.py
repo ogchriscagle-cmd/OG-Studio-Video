@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import time
 from urllib.parse import urlparse, urljoin
 
 import requests
@@ -45,14 +46,31 @@ def api_headers(token=None, binary=False):
     return headers
 
 
+def release_response(session, headers):
+    for attempt in range(3):
+        try:
+            response = session.get(API + "/releases/latest", headers=headers, timeout=(15, 30))
+            if response.status_code not in (429, 500, 502, 503, 504):
+                return response
+            if attempt == 2:
+                raise RuntimeError("GitHub is temporarily unavailable or limiting requests. Try again later or use GitHub releases.")
+            response.close()
+        except requests.exceptions.SSLError:
+            raise RuntimeError("A secure HTTPS connection to GitHub could not be established. Use GitHub releases to download the latest EXE.") from None
+        except (requests.ConnectionError, requests.Timeout):
+            if attempt == 2:
+                raise RuntimeError("Could not connect to GitHub after three attempts. Check your connection or use GitHub releases.") from None
+        time.sleep(attempt + 1)
+
+
 def check_update():
     try:
         with requests.Session() as session:
-            response = session.get(API + "/releases/latest", headers=api_headers(), timeout=(10, 30))
+            response = release_response(session, api_headers())
             if response.status_code in (401, 403, 404):
                 token = github_token()
                 if token:
-                    response = session.get(API + "/releases/latest", headers=api_headers(token), timeout=(10, 30))
+                    response = release_response(session, api_headers(token))
                 if response.status_code in (401, 403, 404):
                     return dict(status="needs_access", current=VERSION)
             response.raise_for_status()

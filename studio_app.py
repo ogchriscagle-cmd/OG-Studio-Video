@@ -681,6 +681,13 @@ def serve(api):
 
 if __name__ == "__main__":
     import sys
+    if len(sys.argv) == 3 and sys.argv[1] == "--check-updates-report":
+        try:
+            report = dict(ok=True, app_version=VERSION, result=check_update())
+        except Exception as error:
+            report = dict(ok=False, app_version=VERSION, error=safe_error(error))
+        Path(sys.argv[2]).write_text(json.dumps(report), encoding="utf-8")
+        sys.exit(0 if report["ok"] else 1)
     if len(sys.argv) == 3 and sys.argv[1] == "--smoke-test":
         try:
             from transformers import BlipProcessor, BlipForQuestionAnswering
