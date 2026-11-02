@@ -43,7 +43,7 @@ class BatchTests(unittest.TestCase):
 
     def test_missing_login_raises_catchable_error_before_browser(self):
         self.auth.unlink()
-            with self.assertRaisesRegex(RuntimeError, "Sign in & remember"):
+        with self.assertRaisesRegex(RuntimeError, "Sign in & remember"):
             self.run_batch()
         self.env["sync_playwright"].assert_not_called()
 
