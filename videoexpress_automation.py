@@ -414,7 +414,7 @@ def setup_project_folder(title_name, ref_photo_path, song_path):
     upload the character reference image and the song file into it.
     Launches its own browser session (reuses the saved login state)."""
     if not AUTH_STATE_PATH.exists():
-        raise RuntimeError("No saved VideoExpress session found. Run python videoexpress_automation.py login first.")
+        raise RuntimeError("No saved VideoExpress session found. Use Sign in & remember in the VideoExpress account card, then retry.")
 
     to_upload = []
     if ref_photo_path:
@@ -538,7 +538,7 @@ def generate_image_and_video(page, scene, timeout_sec=120, on_submitting=None):
 def run_batch(storyboard_path, ref_photo_name, aspect, start_scene=1, end_scene=None,
               image_wait_sec=120, folder_name="ogchris"):
     if not AUTH_STATE_PATH.exists():
-        raise RuntimeError("No saved VideoExpress session found. Run python videoexpress_automation.py login first.")
+        raise RuntimeError("No saved VideoExpress session found. Use Sign in & remember in the VideoExpress account card, then retry.")
 
     storyboard = json.loads(Path(storyboard_path).read_text(encoding="utf-8"))
     scenes = storyboard["scenes"]
@@ -953,7 +953,7 @@ def assemble_final_video(folder_name, video_idents=None):
     the named folder, sorted ascending by id) -- only safe for a folder that
     has never had more than one song's clips in it."""
     if not AUTH_STATE_PATH.exists():
-        raise RuntimeError("No saved VideoExpress session found. Run python videoexpress_automation.py login first.")
+        raise RuntimeError("No saved VideoExpress session found. Use Sign in & remember in the VideoExpress account card, then retry.")
 
     with sync_playwright() as pw:
         browser = launch_browser(pw)

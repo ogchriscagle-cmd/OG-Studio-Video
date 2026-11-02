@@ -8,6 +8,12 @@ window.socialStudio=(()=>{
   };
   let mode='video',tab='music',lastSong='',lastVideo='',planSignature='';
   const player=$('social-video-player'),songPlayer=$('social-song-player');
+  // Both workspaces use the same card, handlers, and saved account state.
+  const accountCard=document.querySelector('.account-card');
+  const musicAccountSlot=document.createElement('div');
+  accountCard.before(musicAccountSlot);
+  const socialAccountSlot=document.createElement('div');
+  $('social-workspace').querySelector('.social-modes').before(socialAccountSlot);
   const fieldIds=['start','duration','platform','framing','x','y','hook','cta','preset','prompt','style'];
   function capture(){
     const result={mode,tab};
@@ -23,6 +29,7 @@ window.socialStudio=(()=>{
     tab=which==='social'?'social':'music';
     $('music-workspace').hidden=tab!=='music';$('social-workspace').hidden=tab!=='social';
     $('workspace-label').textContent=tab==='social'?'Social Clip Studio':'Music video studio';
+    (tab==='social'?socialAccountSlot:musicAccountSlot).append(accountCard);
     document.querySelectorAll('.nav').forEach(button=>button.classList.toggle('active',tab==='social'?button.id==='social-nav':button.dataset.scroll==='top'));
     if(tab==='social'){audio.pause();video.pause();}else{player.pause();songPlayer.pause();}
     window.scrollTo(0,0);

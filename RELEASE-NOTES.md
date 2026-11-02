@@ -1,4 +1,11 @@
-# OG Studio Video v1.7.0 for Windows
+# OG Studio Video v1.7.1 for Windows
+
+## v1.7.1: Sign in from either studio
+
+Social Clip Studio now includes the same VideoExpress account card as Music
+video studio. Sign in & remember, reconnect, or check the saved connection
+without switching tabs. Both studios share one saved account. Missing-session
+errors point to the account card.
 
 ## New: Social Clip Studio
 
@@ -18,7 +25,7 @@ VideoExpress, import clips, assemble the final project, and export its MP4.
 
 ## Install
 
-1. Download `OG-Studio-Video-v1.7.0-windows-x64.exe` from this release.
+1. Download `OG-Studio-Video-v1.7.1-windows-x64.exe` from this release.
 2. Open the EXE. Python and a separate `_internal` folder are not required.
 3. Wait for the bundled files to unpack and the app to open. Startup can take a minute.
 4. Use the VideoExpress account card to sign in once on your computer.
