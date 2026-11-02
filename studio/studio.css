@@ -22,3 +22,5 @@ body{padding-bottom:var(--activity-height,120px)}
 #download-progress{width:100%;height:8px;margin-top:10px;accent-color:var(--lime)}
 
 header{gap:12px;flex-wrap:wrap;height:auto;min-height:58px}.project-actions{flex-wrap:wrap;justify-content:flex-end}
+
+.styles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.style{white-space:normal;min-height:38px}.direction-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.direction-grid label{min-width:0}.direction-summary{border-left:2px solid var(--lime);padding:9px 12px;background:#1c241c;color:#bac6ad;font-size:11px;line-height:1.7;margin-top:16px;overflow-wrap:anywhere}

@@ -5,6 +5,7 @@ suitable for pasting into an AI video generator (e.g. VideoExpress.ai).
 import json
 import os
 import math
+from visual_direction import scene_direction, direction_settings
 
 MOOD_BY_LABEL_ENERGY = {
     # (label) -> list of (max_energy_threshold, mood_desc)
@@ -46,7 +47,8 @@ def pick(lst, i):
     return lst[i % len(lst)]
 
 
-def build_storyboard(analysis, artist=None, song_title=None):
+def build_storyboard(analysis, artist=None, song_title=None, visual=None):
+    visual = direction_settings(visual) if visual is not None else None
     sections = plan_shots(analysis["sections"], analysis["duration"])
     tempo = analysis["tempo"]
     key = analysis["key"]
@@ -65,6 +67,9 @@ def build_storyboard(analysis, artist=None, song_title=None):
         # video/audio prompt (motion + implied sound). Split accordingly.
         image_prompt = f"{subject}, {palette} color grade, cinematic lighting, high detail, {bucket}-energy atmosphere"
         video_audio_prompt = f"{camera}, {bucket} energy mood, subtle atmospheric motion and ambient sound matching the scene"
+        if visual is not None:
+            image_prompt, video_audio_prompt = scene_direction(subject, palette, camera, bucket, sec["label"], i, visual)
+            prompt = f"{image_prompt}, {video_audio_prompt}"
 
         scenes.append({
             "scene_number": i + 1,
@@ -92,6 +97,8 @@ def build_storyboard(analysis, artist=None, song_title=None):
         "scene_count": len(scenes),
         "scenes": scenes,
     }
+    if visual is not None:
+        storyboard["visual_direction"] = visual
     return storyboard
 
 

@@ -23,18 +23,18 @@ class UpdateTests(unittest.TestCase):
         self.assertNotIn('private transport',str(failure.exception))
 
     def info(self, data=b'MZtest'):
-        return dict(status='available',latest='v1.5.0',name='OG-Studio-v1.5.0-windows-x64.exe',asset_id=8,size=len(data),sha256=hashlib.sha256(data).hexdigest())
+        return dict(status='available',latest='v1.6.0',name='OG-Studio-v1.6.0-windows-x64.exe',asset_id=8,size=len(data),sha256=hashlib.sha256(data).hexdigest())
 
     def test_versions_are_numeric(self):
         self.assertGreater(update.version_tuple('v1.10.0'),update.version_tuple('v1.9.0'))
         self.assertEqual(update.version_tuple('v1.2'),(1,2,0))
-        with self.assertRaises(ValueError):update.version_tuple('v1.5.0-beta')
+        with self.assertRaises(ValueError):update.version_tuple('v1.6.0-beta')
 
     def test_available_release(self):
         with patch.object(update.requests,'Session') as sessions:
             response=sessions.return_value.__enter__.return_value.get.return_value
             response.status_code=200
-            response.json.return_value=dict(tag_name='v1.5.0',assets=[dict(name='OG-Studio-v1.5.0-windows-x64.exe',state='uploaded',id=8,size=6,digest='sha256:'+'a'*64,url=update.API+'/releases/assets/8')])
+            response.json.return_value=dict(tag_name='v1.6.0',assets=[dict(name='OG-Studio-v1.6.0-windows-x64.exe',state='uploaded',id=8,size=6,digest='sha256:'+'a'*64,url=update.API+'/releases/assets/8')])
             self.assertEqual(update.check_update()['status'],'available')
 
     def test_private_repo_without_credentials_has_browser_fallback(self):

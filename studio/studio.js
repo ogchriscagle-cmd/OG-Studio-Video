@@ -18,7 +18,7 @@ async function persistWorkspace(){
   try{const result=await window.pywebview.api.update_workspace(captureWorkspace());if(result.error)showError(result.error);}
   catch(error){showError('Could not save the workspace: '+String(error));}
 }
-function scheduleWorkspace(){clearTimeout(workspaceTimer);workspaceTimer=setTimeout(persistWorkspace,350);}
+function scheduleWorkspace(){updateDirectionSummary();clearTimeout(workspaceTimer);workspaceTimer=setTimeout(persistWorkspace,350);}
 const audio=$('audio'), video=$('video');
 const time = n => `${String(Math.floor((n||0)/60)).padStart(2,'0')}:${String(Math.floor((n||0)%60)).padStart(2,'0')}`;
 function updateActivity(){
@@ -33,14 +33,18 @@ async function call(method,...args){
   try{if(method!=='get_state')await persistWorkspace();const result=await window.pywebview.api[method](...args);if(result.error&&!('busy' in result)){showError(result.error);return;}render(result);}
   catch(error){showError(String(error));}
 }
-function options(){return {title:$('title').value.trim(),artist:$('artist').value.trim(),style,character:$('character-name').value,appearance:$('appearance').value,concept:$('concept').value};}
+function options(){return {title:$('title').value.trim(),artist:$('artist').value.trim(),style,character:$('character-name').value,appearance:$('appearance').value,concept:$('concept').value,mood:$('mood').value,lighting:$('lighting').value,location:$('location').value.trim(),camera:$('camera').value};}
+function updateDirectionSummary(){
+  const o=options();
+  $('direction-summary').textContent=[`Style: ${o.style}`,`Mood: ${o.mood||'Follow song'}`,`Lighting: ${o.lighting||'Use visual style'}`,o.location?`Location: ${o.location}`:null,`Camera: ${o.camera||'Follow song'}`].filter(Boolean).join(' · ');
+}
 function render(next){
   const old=state;state=next;
   const restoring=state.workspace_revision!==old.workspace_revision&&!!state.ui;
   if(restoring){
     restoringWorkspace=true;audio.pause();
     const ui=state.ui;
-    for(const [id,key] of Object.entries({'title':'title','artist':'artist','character-name':'character','appearance':'appearance','concept':'concept','reference-name':'reference_name','asset-ids':'asset_ids'}))$(id).value=ui[key]??'';
+    for(const [id,key] of Object.entries({'title':'title','artist':'artist','character-name':'character','appearance':'appearance','concept':'concept','reference-name':'reference_name','asset-ids':'asset_ids','mood':'mood','lighting':'lighting','location':'location','camera':'camera'}))$(id).value=ui[key]??'';
     style=ui.style||'Cinematic';document.querySelectorAll('.style').forEach(b=>b.classList.toggle('selected',b.dataset.style===style));
     $('aspect').value=ui.aspect==='9:16'?'9:16':'16:9';$('frame-label').textContent=$('aspect').value;$('screen').classList.toggle('vertical',$('aspect').value==='9:16');
     pendingPreview=Math.max(0,Number(ui.preview_seconds)||0);appliedDraft=state.appearance_draft?.text||null;
@@ -86,6 +90,7 @@ function render(next){
   $('app-version').textContent=state.app_version?'v'+state.app_version:'';
   const update=state.app_update;
   $('check-updates').textContent=update?.status==='available'?`↓ Download ${update.latest}`:update?.status==='downloaded'?'Show downloaded update':update?.status==='needs_access'?'Sign in on GitHub ↗':update?.status==='manual'?'View update ↗':'↻ Check updates';
+  updateDirectionSummary();
   const finalExport=state.final_export;
   $('open-final-video').disabled=!ready||state.busy||finalExport?.status!=='completed';
   $('export-video').textContent=finalExport&&['submitted','submission_unknown','download_pending'].includes(finalExport.status)?'Resume export & download ↓':'Export & download video ↓';
@@ -154,7 +159,7 @@ function syncPreview(force=false){
   }
 }
 document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n===b));$(b.dataset.scroll).scrollIntoView({behavior:'smooth',block:'start'});});
-document.querySelectorAll('[data-style]').forEach(b=>b.onclick=()=>{style=b.dataset.style;document.querySelectorAll('.style').forEach(s=>s.classList.toggle('selected',s===b));});
+document.querySelectorAll('[data-style]').forEach(b=>b.onclick=()=>{style=b.dataset.style;document.querySelectorAll('.style').forEach(s=>s.classList.toggle('selected',s===b));updateDirectionSummary();});
 $('pick-audio').onclick=$('change-track').onclick=()=>call('choose_media','audio');
 $('pick-photo').onclick=$('change-photo').onclick=()=>call('choose_media','photo');
 $('draft-appearance').onclick=()=>{appearanceBaseline=$('appearance').value;appliedDraft=null;call('draft_appearance');};

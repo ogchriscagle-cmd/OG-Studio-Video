@@ -25,6 +25,7 @@ from videoexpress_automation import AUTH_STATE_PATH, check_saved_session
 from runtime_paths import ASSET_ROOT, DATA_ROOT
 from app_version import VERSION
 from app_updates import check_update, download_update, RELEASES_URL
+from visual_direction import STYLES
 
 ROOT = DATA_ROOT
 
@@ -39,13 +40,6 @@ def safe_error(error):
     """Playwright call logs can contain authenticated request headers."""
     message = str(error).split("Call log:", 1)[0].strip()
     return re.sub(r"(?im)^.*(?:cookie|authorization)\s*:.*$", "[Sensitive request header removed]", message)
-
-
-STYLES = {
-    "Cinematic": "cinematic realism, rich natural lighting, subtle film grain",
-    "Neon noir": "neon noir, rain-slick streets, electric lime and violet lighting",
-    "Dreamscape": "surreal dreamscape, soft diffused light, ethereal atmosphere",
-}
 
 
 class StudioAPI:
@@ -189,6 +183,10 @@ class StudioAPI:
         if board:
             ui.setdefault("title", board["song_title"])
             ui.setdefault("artist", board["artist"])
+            direction = board.get("visual_direction")
+            if isinstance(direction, dict):
+                for key in ("style", "mood", "lighting", "location", "camera"):
+                    ui.setdefault(key, direction.get(key, ""))
         status = "Previous workspace restored." if recovery else f"Opened {path.name}."
         if saved.get("busy"):
             status += " The previous operation was interrupted; check clip tracking before retrying."
@@ -333,15 +331,15 @@ class StudioAPI:
             return {"error": "Choose a song first."}
         def work():
             analysis = analyze_song(audio["path"])
-            board = build_storyboard(analysis, options.get("artist"), options.get("title"))
-            style = STYLES.get(options.get("style"), STYLES["Cinematic"])
+            board = build_storyboard(analysis, options.get("artist"), options.get("title"), visual=options)
             character = options.get("character", "").strip()
             appearance = options.get("appearance", "").strip()
             concept = options.get("concept", "").strip()
-            direction = ", ".join(filter(None, [style, character, appearance, concept]))
+            direction = ", ".join(filter(None, [character, appearance, concept]))
             for scene in board["scenes"]:
-                scene["image_prompt"] += ", " + direction
-                scene["video_prompt"] += ", " + direction
+                if direction:
+                    scene["image_prompt"] += ", " + direction
+                scene["video_prompt"] = f"{scene['image_prompt']}, {scene['video_audio_prompt']}"
             with self._lock:
                 self._state.update(analysis=analysis, storyboard=board, clips={}, options=options)
                 self._state["ui"].pop("scene_drafts", None)

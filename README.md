@@ -149,3 +149,11 @@ The Windows EXE shows a native startup splash during unpacking and initializatio
 with stage progress and elapsed time. Audio-analysis imports are deferred until
 you create a storyboard. The splash closes after the studio interface connects.
 For automated checks, set `PYINSTALLER_SUPPRESS_SPLASH_SCREEN=1` to suppress it.
+
+## Creative direction
+
+Choose among nine styles in Shape the world, then optionally set mood, lighting,
+location, and camera movement. The direction summary updates as you edit. Create
+a storyboard to apply these choices; image and motion prompts remain editable.
+Settings autosave with the project and are included in storyboard JSON exports.
+Follow song uses automatic mood and camera choices that vary by track energy.

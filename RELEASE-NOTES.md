@@ -1,11 +1,11 @@
-# OG Studio v1.4.1 for Windows
+# OG Studio v1.5.0 for Windows
 
 Create a music-video storyboard, keep a consistent character, generate scenes in
 VideoExpress, import clips, assemble the final project, and export its MP4.
 
 ## Install
 
-1. Download `OG-Studio-v1.4.1-windows-x64.exe` from this release.
+1. Download `OG-Studio-v1.5.0-windows-x64.exe` from this release.
 2. Open the EXE. Python and a separate `_internal` folder are not required.
 3. Wait for the bundled files to unpack and the app to open. Startup can take a minute.
 4. Use the VideoExpress account card to sign in once on your computer.
@@ -75,3 +75,15 @@ The Windows EXE, main window, and taskbar now use a custom dark-and-lime OG
 monogram. The ICO includes sizes from 16 to 256 pixels for crisp display in
 File Explorer and the taskbar. A dedicated application identity separates the
 studio from other Python applications in the taskbar.
+
+## Expanded creative direction
+
+Shape the world now offers nine visual styles: Cinematic, Neon noir, Dreamscape,
+Vintage film, Horror, Anime, Watercolor, Cyberpunk, and Live stage. Choose mood,
+lighting, location, and camera movement, with a live summary of your direction.
+
+Create a storyboard to apply the choices to every scene. Explicit mood, lighting,
+and camera choices replace automatic defaults in image/motion prompts. Location
+choices adapt the scene actions to your setting. Follow song preserves automatic
+variation based on track energy. The controls save with projects and exported
+storyboard JSON files; older projects continue to open with automatic defaults.
