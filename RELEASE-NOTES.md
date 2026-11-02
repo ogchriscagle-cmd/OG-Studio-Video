@@ -1,11 +1,24 @@
-# OG Studio Video v1.6.0 for Windows
+# OG Studio Video v1.7.0 for Windows
+
+## New: Social Clip Studio
+
+A separate sidebar workspace creates vertical promotional clips from a finished
+video or a song + prompt. Start with 30 seconds, adjust framing, add an opening
+hook and a closing follow/subscribe message, then export a 1080×1920 MP4 for
+YouTube Shorts, Instagram/Facebook Reels, or TikTok. Choose the segment manually.
+
+Finished-video trimming and MP4 export run locally. Song-based scene generation
+uses your VideoExpress account credits, with optional character reference,
+separate scene tracking, and automatic import/assembly of ready clips. Review
+the plan before generating. Social settings and media are saved with projects
+and restored after reopening. Posting to your accounts is manual.
 
 Create a music-video storyboard, keep a consistent character, generate scenes in
 VideoExpress, import clips, assemble the final project, and export its MP4.
 
 ## Install
 
-1. Download `OG-Studio-Video-v1.6.0-windows-x64.exe` from this release.
+1. Download `OG-Studio-Video-v1.7.0-windows-x64.exe` from this release.
 2. Open the EXE. Python and a separate `_internal` folder are not required.
 3. Wait for the bundled files to unpack and the app to open. Startup can take a minute.
 4. Use the VideoExpress account card to sign in once on your computer.

@@ -1,5 +1,31 @@
 # OG Studio Video
 
+## Social Clip Studio
+
+Open **Social Clip Studio** below **Music video studio** in the sidebar.
+
+- **From finished video:** choose an existing video, or use the downloaded final
+  music video. Set a start time and a 3–60 second length (30 seconds by default).
+- **From song + prompt:** choose a song, its start time and clip length, then a
+  prompt preset or your own description. An optional reference photo keeps a
+  consistent character. Create and review the scene plan before generating.
+  Generation uploads the excerpt/reference and uses your VideoExpress credits.
+  **Refresh & import clips** downloads matched renders and combines them with the
+  selected song excerpt locally. Retries skip tracked submissions.
+- Adjust the vertical crop with horizontal/vertical sliders, or keep the full
+  picture with black bars. Preview an opening hook (first 3 seconds) and a
+  follow/subscribe message (last 5 seconds).
+- Choose YouTube Shorts, Instagram Reels, Facebook Reels, or TikTok, then
+  **Export social MP4**. Each uses the same 1080×1920 H.264/AAC vertical MP4.
+  Export progress appears at the bottom. Posting to a social account is manual.
+
+Social settings, media references, and clip tracking are included in project
+save/open and session recovery. The music-video storyboard stays separate.
+Keep the original media and the app's local data folder available when reopening.
+Manual framing is supported; subject tracking and automatic captions are not
+included. The desktop browser may not preview every input codec; H.264 MP4 and
+MP3/WAV are the most reliable preview formats.
+
 Windows users can run the single-file GitHub release EXE without
 installing Python. See [release instructions](RELEASE-NOTES.md). Developers can
 build the same EXE with `powershell -ExecutionPolicy Bypass -File "Build Windows Release.ps1"`

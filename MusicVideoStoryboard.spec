@@ -1,6 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 from app_version import VERSION, APP_NAME, RELEASE_PREFIX
-from PyInstaller.utils.hooks import collect_submodules, copy_metadata
+from PyInstaller.utils.hooks import collect_submodules, copy_metadata, collect_data_files
 from pathlib import Path
 import ssl
 from build_splash import StudioSplash, splash_image
@@ -16,7 +16,7 @@ a = Analysis(
     ['studio_app.py'],
     pathex=[],
     binaries=[],
-    datas=[('studio', 'studio'), ('assets/og-studio.ico', 'assets')] + ssl_datas + copy_metadata('transformers') + copy_metadata('huggingface-hub'),
+    datas=[('studio', 'studio'), ('assets/og-studio.ico', 'assets')] + ssl_datas + copy_metadata('transformers') + copy_metadata('huggingface-hub') + collect_data_files('imageio_ffmpeg'),
     hiddenimports=collect_submodules('transformers.models.blip') + [
         'transformers.models.bert.tokenization_bert',
         'transformers.models.bert.tokenization_bert_fast',

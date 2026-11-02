@@ -22,6 +22,10 @@ for name in archive.toc:
         raise SystemExit(f"Private runtime data must not be packaged: {name}")
 if not any(name.replace(chr(92), '/') == 'studio/index.html' for name in archive.toc):
     raise SystemExit("The executable is missing the studio interface.")
+if not any(name.replace(chr(92), '/') == 'studio/social.js' for name in archive.toc):
+    raise SystemExit("The executable is missing Social Clip Studio.")
+if not any('imageio_ffmpeg/binaries/ffmpeg' in name.replace(chr(92), '/') and name.endswith('.exe') for name in archive.toc):
+    raise SystemExit("The executable is missing the local social-video encoder.")
 with destination.open("rb") as content:
     digest = hashlib.file_digest(content, "sha256").hexdigest()
 destination.with_suffix(".exe.sha256").write_text(f"{digest}  {destination.name}" + chr(10), encoding="utf-8")

@@ -12,5 +12,6 @@ dist/
 .studio-session.json.tmp
 .studio-session.json.*.tmp
 output/projects/
+output/social/
 output/clips/
 output/storyboard.clips.json

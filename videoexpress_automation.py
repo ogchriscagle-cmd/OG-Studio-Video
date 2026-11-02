@@ -176,7 +176,7 @@ def fill_scene(page, scene, ref_photo_name, aspect, folder_name="ogchris"):
         )
 
     ensure_checked("auto_enhance_prompt", True)
-    ensure_checked("use_consistent_character", True)
+    ensure_checked("use_consistent_character", bool(ref_photo_name))
     ensure_checked("shared", False)
 
     # Advanced mode reveals manual length controls.
@@ -195,7 +195,8 @@ def fill_scene(page, scene, ref_photo_name, aspect, folder_name="ogchris"):
         duration,
     )
 
-    set_reference_photo(page, ref_photo_name, folder_name)
+    if ref_photo_name:
+        set_reference_photo(page, ref_photo_name, folder_name)
 
 
 def set_reference_photo(page, ref_photo_name, folder_name="ogchris"):

@@ -51,7 +51,10 @@ def read_project(path):
     else:
         board = data
         data = dict(format="storyboard-import", state=dict(storyboard=board), ui={})
-    if board is not None:
+    social = data["state"].get("social") or {}
+    if not isinstance(social, dict):
+        raise ValueError("The social clip workspace is invalid.")
+    for board in [b for b in (board, social.get("board")) if b is not None]:
         if not isinstance(board, dict) or not isinstance(board.get("scenes"), list) or not board["scenes"]:
             raise ValueError("The storyboard must contain scenes.")
         previous = 0

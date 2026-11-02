@@ -26,6 +26,7 @@ from runtime_paths import ASSET_ROOT, DATA_ROOT
 from app_version import VERSION
 from app_updates import check_update, download_update, RELEASES_URL
 from visual_direction import STYLES
+from social_studio import SocialStudio
 
 ROOT = DATA_ROOT
 
@@ -42,7 +43,7 @@ def safe_error(error):
     return re.sub(r"(?im)^.*(?:cookie|authorization)\s*:.*$", "[Sensitive request header removed]", message)
 
 
-class StudioAPI:
+class StudioAPI(SocialStudio):
     def ui_ready(self):
         startup_stage(100, "Ready")
         close_startup()
@@ -60,7 +61,7 @@ class StudioAPI:
         self._allow_close = False
         self._state = dict(busy=False, status="Ready. Bring your track.", error=None,
                           audio=None, photo=None, storyboard=None, clips={}, analysis=None, options={}, appearance_draft=None, appearance_error=None,
-                          ui={}, workspace_revision=uuid.uuid4().hex, missing_media=[], save_error=None, final_export=None)
+                          ui={}, workspace_revision=uuid.uuid4().hex, missing_media=[], save_error=None, final_export=None, social={})
         if self._session_path and self._session_path.exists():
             try:
                 self._restore(self._session_path, recovery=True)
@@ -72,6 +73,10 @@ class StudioAPI:
         for media in [state.get("audio"), state.get("photo"), *state.get("clips", {}).values()]:
             if media:
                 media.pop("url", None)
+        social = state.get("social") or {}
+        for item in [social.get(k) for k in ("video", "song", "photo", "generated", "export")] + list((social.get("clips") or {}).values()):
+            if item:
+                item.pop("url", None)
         return dict(format="og-studio-project", version=1, project_id=self._project_id,
                     project_path=str(self._project_path) if self._project_path else None,
                     state=state, ui=state.get("ui", {}))
@@ -154,6 +159,9 @@ class StudioAPI:
             token = uuid.uuid4().hex
             media_map[token] = local
             restored = dict(path=str(local), name=local.name, url=f"/media/{token}")
+            for field in ("duration", "width", "height", "platform"):
+                if field in item:
+                    restored[field] = item[field]
             if item.get("asset_id"):
                 restored["asset_id"] = str(item["asset_id"])
             return restored
@@ -165,6 +173,7 @@ class StudioAPI:
             item = media(saved.get("clips", {}).get(n) or references.get(f"clip:{n}"), f"clip:{n}")
             if item:
                 clips[n] = item
+        social = self._restore_social(saved.get("social"), media, references)
         project_id = data.get("project_id", "")
         if not isinstance(project_id, str) or len(project_id) != 32 or any(c not in "0123456789abcdef" for c in project_id):
             project_id = uuid.uuid4().hex
@@ -197,7 +206,7 @@ class StudioAPI:
                            storyboard=board, analysis=saved.get("analysis") or (dict(duration=board["total_duration"], tempo=board["tempo_bpm"]) if board else None),
                            options=saved.get("options", {}), ui=ui, workspace_revision=uuid.uuid4().hex,
                            appearance_draft=None, appearance_error=None, missing_media=missing, save_error=None,
-                           final_export=saved.get("final_export") if isinstance(saved.get("final_export"), dict) else None)
+                           final_export=saved.get("final_export") if isinstance(saved.get("final_export"), dict) else None, social=social)
 
     def _on_closing(self):
         if self._allow_close:
@@ -231,6 +240,9 @@ class StudioAPI:
                 tracking = load_tracking(path, state["storyboard"])
                 state["tracking"] = tracking["scenes"]
                 state["tracking_config"] = tracking["config"]
+            social = state.get("social") or {}
+            if social.get("board"):
+                social["tracking"] = load_tracking(self._social_directory(social) / "storyboard.json", social["board"])
             return state
 
     def _register(self, path):
@@ -642,7 +654,8 @@ def serve(api):
                 path = api._media.get(route.removeprefix("/media/"))
             else:
                 path = {"/": ASSET_ROOT / "studio/index.html", "/studio.css": ASSET_ROOT / "studio/studio.css",
-                        "/studio.js": ASSET_ROOT / "studio/studio.js"}.get(route)
+                        "/studio.js": ASSET_ROOT / "studio/studio.js",
+                        "/social.js": ASSET_ROOT / "studio/social.js"}.get(route)
             if not path or not path.is_file():
                 self.send_error(404)
                 return
@@ -680,7 +693,7 @@ def serve(api):
                             break
                         self.wfile.write(chunk)
                         remaining -= len(chunk)
-            except (BrokenPipeError, ConnectionResetError):
+            except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError):
                 pass
 
         def log_message(self, *args):
@@ -706,11 +719,12 @@ if __name__ == "__main__":
             import torch
             import librosa
             import numpy as np
+            import imageio_ffmpeg
             from webview.platforms import edgechromium
             features = librosa.feature.mfcc(y=np.sin(np.arange(44100) * 0.03), sr=22050)
             report = dict(ok=True, app_version=VERSION, assets=(ASSET_ROOT / "studio/index.html").is_file(),
                           data_directory=str(DATA_ROOT), torch=torch.__version__, librosa=librosa.__version__,
-                          audio_features=list(features.shape))
+                          audio_features=list(features.shape), ffmpeg=imageio_ffmpeg.get_ffmpeg_version())
         except Exception:
             import traceback
             report = dict(ok=False, error=traceback.format_exc())

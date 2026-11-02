@@ -8,3 +8,4 @@ transformers>=4.50,<5
 torch>=2.6
 
 requests>=2.32
+imageio-ffmpeg>=0.6,<0.7

@@ -11,7 +11,7 @@ function captureWorkspace(){
     if(fields.length===2)drafts[card.dataset.scene]={image:fields[0].value,motion:fields[1].value};
   });
   return {...options(),aspect:$('aspect').value,reference_name:$('reference-name').value,
-    asset_ids:$('asset-ids').value,export_size:$('export-size').value,export_quality:$('export-quality').value,scene_drafts:drafts,preview_seconds:audio.currentTime||0,scroll_y:window.scrollY||0};
+    asset_ids:$('asset-ids').value,export_size:$('export-size').value,export_quality:$('export-quality').value,scene_drafts:drafts,preview_seconds:audio.currentTime||0,scroll_y:window.scrollY||0,social:window.socialStudio?.capture()||{}};
 }
 async function persistWorkspace(){
   if(!ready||restoringWorkspace)return;
@@ -98,6 +98,7 @@ function render(next){
   const signature=JSON.stringify([state.storyboard,state.clips,state.tracking]);
   if(signature!==rendering){rendering=signature;renderBoard();syncPreview(true);}
   document.querySelectorAll('.auto-import').forEach(b=>{b.disabled=!ready||state.busy||state.tracking?.[b.dataset.scene]?.status!=='ready';});
+  window.socialStudio?.render(state,restoring);
   if(restoring){
     if(!state.photo){$('portrait-image').hidden=true;$('portrait-image').removeAttribute('src');}
     if(!state.audio){audio.removeAttribute('src');$('track-name').textContent='Choose your track';}
@@ -158,7 +159,7 @@ function syncPreview(force=false){
     if(audio.paused){video.pause();}else if(video.paused&&desired<video.duration-.1){video.play().catch(()=>{});}
   }
 }
-document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n===b));$(b.dataset.scroll).scrollIntoView({behavior:'smooth',block:'start'});});
+document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>{window.socialStudio?.show('music');document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n===b));$(b.dataset.scroll).scrollIntoView({behavior:'smooth',block:'start'});});
 document.querySelectorAll('[data-style]').forEach(b=>b.onclick=()=>{style=b.dataset.style;document.querySelectorAll('.style').forEach(s=>s.classList.toggle('selected',s===b));updateDirectionSummary();});
 $('pick-audio').onclick=$('change-track').onclick=()=>call('choose_media','audio');
 $('pick-photo').onclick=$('change-photo').onclick=()=>call('choose_media','photo');
