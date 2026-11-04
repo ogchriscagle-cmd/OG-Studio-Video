@@ -24,6 +24,8 @@ if not any(name.replace(chr(92), '/') == 'studio/index.html' for name in archive
     raise SystemExit("The executable is missing the studio interface.")
 if not any(name.replace(chr(92), '/') == 'studio/social.js' for name in archive.toc):
     raise SystemExit("The executable is missing Social Clip Studio.")
+if not any(name.replace(chr(92), '/') == 'studio/walkthrough.js' for name in archive.toc):
+    raise SystemExit("The executable is missing the in-app walkthroughs.")
 if not any('imageio_ffmpeg/binaries/ffmpeg' in name.replace(chr(92), '/') and name.endswith('.exe') for name in archive.toc):
     raise SystemExit("The executable is missing the local social-video encoder.")
 with destination.open("rb") as content:

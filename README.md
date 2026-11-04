@@ -1,5 +1,14 @@
 # OG Studio Video
 
+## In-app walkthroughs
+
+Click **How to use** in the toolbar, or **New here? Start a walkthrough** on
+either studio home screen. Choose a full music video, a social clip from a video,
+a social clip from a song, or saving/reopening projects. Each step highlights the
+relevant control and explains what to do. Use Back, Next, and Show me as needed;
+close the guide or press Escape at any time. Actions remain under your control,
+including generation that uses VideoExpress credits.
+
 ## Social Clip Studio
 
 Open **Social Clip Studio** below **Music video studio** in the sidebar.

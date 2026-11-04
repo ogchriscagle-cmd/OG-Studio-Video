@@ -137,5 +137,5 @@ window.socialStudio=(()=>{
   $('social-refresh').onclick=()=>call('refresh_social_clips');
   $('social-export').onclick=()=>call('export_social_video',settings());
   $('social-open-export').onclick=()=>call('open_social_export');
-  return {capture,render,show};
+  return {capture,render,show,setMode};
 })();

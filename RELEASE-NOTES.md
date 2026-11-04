@@ -1,4 +1,13 @@
-# OG Studio Video v1.7.1 for Windows
+# OG Studio Video v1.7.2 for Windows
+
+## New: In-app walkthroughs
+
+Use How to use in the toolbar or Start a walkthrough on either studio home
+screen. Four guides cover full music videos, social clips from finished videos,
+social clips from songs, and saving/reopening projects. Each step highlights a
+control with plain-language instructions. Use Back, Next, Show me, or close the
+guide at any time. Guides remain available while work is running, and generation
+starts only through your own actions.
 
 ## v1.7.1: Sign in from either studio
 
@@ -25,7 +34,7 @@ VideoExpress, import clips, assemble the final project, and export its MP4.
 
 ## Install
 
-1. Download `OG-Studio-Video-v1.7.1-windows-x64.exe` from this release.
+1. Download `OG-Studio-Video-v1.7.2-windows-x64.exe` from this release.
 2. Open the EXE. Python and a separate `_internal` folder are not required.
 3. Wait for the bundled files to unpack and the app to open. Startup can take a minute.
 4. Use the VideoExpress account card to sign in once on your computer.

@@ -99,6 +99,7 @@ function render(next){
   if(signature!==rendering){rendering=signature;renderBoard();syncPreview(true);}
   document.querySelectorAll('.auto-import').forEach(b=>{b.disabled=!ready||state.busy||state.tracking?.[b.dataset.scene]?.status!=='ready';});
   window.socialStudio?.render(state,restoring);
+  window.walkthrough?.render();
   if(restoring){
     if(!state.photo){$('portrait-image').hidden=true;$('portrait-image').removeAttribute('src');}
     if(!state.audio){audio.removeAttribute('src');$('track-name').textContent='Choose your track';}

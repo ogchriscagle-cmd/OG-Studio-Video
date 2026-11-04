@@ -655,7 +655,8 @@ def serve(api):
             else:
                 path = {"/": ASSET_ROOT / "studio/index.html", "/studio.css": ASSET_ROOT / "studio/studio.css",
                         "/studio.js": ASSET_ROOT / "studio/studio.js",
-                        "/social.js": ASSET_ROOT / "studio/social.js"}.get(route)
+                        "/social.js": ASSET_ROOT / "studio/social.js",
+                        "/walkthrough.js": ASSET_ROOT / "studio/walkthrough.js"}.get(route)
             if not path or not path.is_file():
                 self.send_error(404)
                 return
